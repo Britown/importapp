@@ -1307,3 +1307,286 @@ footer {
   transform: scale(1.15);
 }
 
+/* ==========================================================================
+   ADVANCED SOURCING FILTER, RECOMMENDATION & COMPETITOR MATCH STYLES
+   ========================================================================== */
+
+.sourcing-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--glass-border);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-group span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-right: 0.5rem;
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-color: var(--glass-border-hover);
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.sort-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-group span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+#sourcing-sort-select {
+  background: #090e1c;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+#sourcing-sort-select:focus {
+  border-color: var(--primary);
+}
+
+/* Featured Star Recommendation Card */
+.featured-recommendation-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(10, 16, 32, 0.6) 100%);
+  border: 1.5px solid #fbbf24;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .featured-recommendation-card {
+    flex-direction: column;
+  }
+}
+
+.featured-recommendation-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+}
+
+.featured-img-col {
+  width: 320px;
+  min-height: 240px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .featured-img-col {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+.featured-img-col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-content-col {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.star-badge {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  width: fit-content;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.featured-title {
+  font-family: var(--font-title);
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.featured-selling-angle {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+/* Competitor Match Panel */
+.competitor-match-panel {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.match-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.match-source {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.match-confidence {
+  font-size: 0.7rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.match-confidence.similar {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.match-confidence.none {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.match-price-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.comp-price-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.comp-price-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.comp-price-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.margin-real-highlight {
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  padding-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.margin-real-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.margin-real-value {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.margin-real-value.positive {
+  color: #10b981;
+}
+
+.margin-real-value.negative {
+  color: #ef4444;
+}
+
+.ml-view-link {
+  font-size: 0.75rem;
+  color: #60a5fa;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.ml-view-link:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+

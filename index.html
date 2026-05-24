@@ -134,6 +134,31 @@
           </div>
         </section>
 
+        <!-- Star Recommendation Highlight -->
+        <div id="featured-recommendation-container" style="margin-bottom: 2.5rem;">
+          <!-- Rendered dynamically via JavaScript -->
+        </div>
+
+        <!-- Sourcing Filter and Sort Controls -->
+        <div class="sourcing-controls-bar">
+          <div class="filter-group">
+            <span>Filtrar por:</span>
+            <button class="filter-btn active" data-filter="all">Todo (20)</button>
+            <button class="filter-btn" data-filter="easy">Importación Fácil (Sin SEC/ISP)</button>
+            <button class="filter-btn" data-filter="margin">Alta Rentabilidad (>60%)</button>
+            <button class="filter-btn" data-filter="match">Coincidencia en Chile (ML)</button>
+          </div>
+          <div class="sort-group">
+            <span>Ordenar por:</span>
+            <select id="sourcing-sort-select">
+              <option value="recommended">Recomendados Primero</option>
+              <option value="margin-desc">Mayor Margen %</option>
+              <option value="cost-asc">Menor Costo FOB</option>
+              <option value="score-desc">Mayor Score</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Ranked Products Grid -->
         <h3 class="section-title">Oportunidades de Productos Identificadas</h3>
         <section id="products-container" class="products-grid">

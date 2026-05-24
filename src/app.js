@@ -50,6 +50,13 @@ const summarySafeDesc = document.getElementById('summary-safe-desc');
 // Active state report data
 let activeReport = null;
 
+// Sourcing filters, sorting and products state
+let sourcingProducts = [];
+let currentFilter = 'all';
+let currentSort = 'recommended';
+
+const featuredContainer = document.getElementById('featured-recommendation-container');
+
 // ==========================================
 // ADVANCED COSTS PLANILLA ELEMENTS & STATE
 // ==========================================
@@ -201,6 +208,25 @@ function init() {
     renderCostsTab();
   });
 
+  // Sourcing Filter Buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.getAttribute('data-filter');
+      applySourcingFilterAndSort();
+    });
+  });
+
+  // Sourcing Sort Dropdown
+  const selectSort = document.getElementById('sourcing-sort-select');
+  if (selectSort) {
+    selectSort.addEventListener('change', () => {
+      currentSort = selectSort.value;
+      applySourcingFilterAndSort();
+    });
+  }
+
   // Bind cost tab controls
   bindCostsControls();
 }
@@ -299,8 +325,28 @@ function finishAnalysis(query) {
   const hasModerate = data.products.some(p => p.import_difficulty === 'Moderate');
   statDifficulty.textContent = hasDifficult ? 'Alta (ISP/SEC)' : (hasModerate ? 'Moderada' : 'Fácil');
 
-  // Render Products Grid Cards
-  renderProductCards(data.products);
+  // Initialize filters
+  sourcingProducts = [...data.products];
+  currentFilter = 'all';
+  currentSort = 'recommended';
+
+  // Reset active classes on filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    if (btn.getAttribute('data-filter') === 'all') {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  // Reset select sorting value
+  const selectSort = document.getElementById('sourcing-sort-select');
+  if (selectSort) {
+    selectSort.value = 'recommended';
+  }
+
+  // Apply filters and sort to render products and star recommendation
+  applySourcingFilterAndSort();
   
   // Setup simulator product select dropdown
   simProductSelect.innerHTML = '';
@@ -323,6 +369,199 @@ function finishAnalysis(query) {
   showScreen(dashboardScreen);
 }
 
+// Calculate the unit Landed Cost exactly like simulator
+function calculateUnitLandedCost(p) {
+  const qty = 100;
+  const shippingType = p.import_difficulty === 'Difficult' || p.weight_kg > 1.0 ? 'sea' : 'air';
+  const unitCostUsd = p.unit_cost_usd;
+  const totalFobUsd = unitCostUsd * qty;
+  const freightPerKg = shippingType === 'air' ? 10.0 : 3.5;
+  const totalWeight = p.weight_kg * qty;
+  const totalFreightUsd = totalWeight * freightPerKg;
+  const cifValueUsd = totalFobUsd + totalFreightUsd;
+  const adValoremUsd = cifValueUsd * 0.06;
+  const ivaUsd = (cifValueUsd + adValoremUsd) * 0.19;
+  const customsBrokerFeeUsd = shippingType === 'sea' ? 150.0 : 30.0;
+  const totalLandedCostUsd = cifValueUsd + adValoremUsd + ivaUsd + customsBrokerFeeUsd;
+  const totalLandedCostClp = totalLandedCostUsd * USD_TO_CLP;
+  return Math.round(totalLandedCostClp / qty);
+}
+
+// Apply filtering and sorting criteria
+function applySourcingFilterAndSort() {
+  if (!sourcingProducts || sourcingProducts.length === 0) return;
+
+  // 1. Filter
+  let filtered = [...sourcingProducts];
+  if (currentFilter === 'easy') {
+    filtered = filtered.filter(p => p.import_difficulty !== 'Difficult');
+  } else if (currentFilter === 'margin') {
+    filtered = filtered.filter(p => p.estimated_margin_percent >= 60);
+  } else if (currentFilter === 'match') {
+    filtered = filtered.filter(p => p.photo_match && p.photo_match !== 'No vendido en Chile');
+  }
+
+  // 2. Sort
+  filtered.sort((a, b) => {
+    if (currentSort === 'recommended') {
+      if (a.recommended && !b.recommended) return -1;
+      if (!a.recommended && b.recommended) return 1;
+      return b.score - a.score;
+    } else if (currentSort === 'margin-desc') {
+      return b.estimated_margin_percent - a.estimated_margin_percent;
+    } else if (currentSort === 'cost-asc') {
+      return a.unit_cost_usd - b.unit_cost_usd;
+    } else if (currentSort === 'score-desc') {
+      return b.score - a.score;
+    }
+    return 0;
+  });
+
+  // Update real-time counts on filter buttons
+  updateFilterCounts();
+
+  // Render cards and featured block
+  renderProductCards(filtered);
+
+  const recommendedProduct = sourcingProducts.find(p => p.recommended);
+  if (recommendedProduct) {
+    renderFeaturedRecommendation(recommendedProduct);
+  } else {
+    if (featuredContainer) featuredContainer.innerHTML = '';
+  }
+}
+
+// Update filter button counts in real-time
+function updateFilterCounts() {
+  const allCount = sourcingProducts.length;
+  const easyCount = sourcingProducts.filter(p => p.import_difficulty !== 'Difficult').length;
+  const marginCount = sourcingProducts.filter(p => p.estimated_margin_percent >= 60).length;
+  const matchCount = sourcingProducts.filter(p => p.photo_match && p.photo_match !== 'No vendido en Chile').length;
+
+  const btnAll = document.querySelector('.filter-btn[data-filter="all"]');
+  const btnEasy = document.querySelector('.filter-btn[data-filter="easy"]');
+  const btnMargin = document.querySelector('.filter-btn[data-filter="margin"]');
+  const btnMatch = document.querySelector('.filter-btn[data-filter="match"]');
+
+  if (btnAll) btnAll.textContent = `Todo (${allCount})`;
+  if (btnEasy) btnEasy.textContent = `Importación Fácil (${easyCount})`;
+  if (btnMargin) btnMargin.textContent = `Alta Rentabilidad (${marginCount})`;
+  if (btnMatch) btnMatch.textContent = `Coincidencia en ML (${matchCount})`;
+}
+
+// Render the top featured star recommendation block
+function renderFeaturedRecommendation(p) {
+  if (!featuredContainer) return;
+
+  const roundedStars = Math.round(p.score);
+  let starsHtml = '';
+  for (let i = 1; i <= 5; i++) {
+    starsHtml += i <= roundedStars ? '★' : '☆';
+  }
+
+  const landedCostClp = calculateUnitLandedCost(p);
+  const marginClp = p.estimated_resale_clp - landedCostClp;
+  const realMarginPercent = Math.round((marginClp / p.estimated_resale_clp) * 100);
+
+  const isSold = p.photo_match && p.photo_match !== 'No vendido en Chile';
+  let badgeClass = 'none';
+  if (isSold) {
+    badgeClass = p.photo_match.includes('Idéntico') || p.photo_match.includes('98%') || p.photo_match.includes('99%') ? '' : 'similar';
+  }
+
+  featuredContainer.innerHTML = `
+    <div class="featured-recommendation-card">
+      ${p.thumbnail ? `
+      <div class="featured-img-col">
+        <img src="${p.thumbnail}" alt="${p.name}" />
+      </div>
+      ` : ''}
+      <div class="featured-content-col">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+          <div class="star-badge">⭐️ Recomendación Estrella</div>
+          <div class="score-badge" style="position: static; transform: none; margin-bottom: 1rem;">
+            <span>${starsHtml}</span>
+            <span>${p.score.toFixed(1)}</span>
+          </div>
+        </div>
+        
+        <h3 class="featured-title" style="margin-top: 0;">${p.name}</h3>
+        <p class="featured-selling-angle" style="margin-top: 0; margin-bottom: 1rem;">${p.selling_angle}</p>
+        
+        <div class="supplier-meta" style="margin-bottom: 1rem;">
+          <span>💼 Alibaba B2B (Proveedor Verificado)</span>
+          <span>📅 ${p.supplier_years} años activo</span>
+        </div>
+
+        <div class="badges-row" style="margin-bottom: 1.25rem;">
+          <span class="tag-badge verified" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">✓ Proveedor Validado</span>
+          <span class="tag-badge ${p.competition_chile.toLowerCase()}">📊 Competencia: ${p.competition_chile}</span>
+          <span class="tag-badge ${p.import_difficulty.toLowerCase()}">🚚 Importación: ${p.import_difficulty}</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <h5 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase;">Detalles de Importación</h5>
+            <div class="financial-grid" style="grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="fin-item">
+                <span class="fin-label">FOB Unitario</span>
+                <span class="fin-val">$${p.unit_cost_usd.toFixed(2)} USD</span>
+              </div>
+              <div class="fin-item">
+                <span class="fin-label">Landed Cost Est.</span>
+                <span class="fin-val" style="color: #fbbf24; font-weight: 700;">$${landedCostClp.toLocaleString('es-CL')} CLP</span>
+              </div>
+              <div class="fin-item">
+                <span class="fin-label">Peso Promedio</span>
+                <span class="fin-val">${p.weight_kg} kg</span>
+              </div>
+              <div class="fin-item">
+                <span class="fin-label">Margen Esperado</span>
+                <span class="fin-val highlight">${realMarginPercent}%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h5 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase;">Match Competidor</h5>
+            <div class="competitor-match-panel" style="margin: 0; height: calc(100% - 1.5rem); display: flex; flex-direction: column; justify-content: space-between;">
+              <div class="match-header-row">
+                <span class="match-source">🔍 MERCADO LIBRE CHILE</span>
+                <span class="match-confidence ${badgeClass}">${p.photo_match}</span>
+              </div>
+              <div class="match-price-comparison">
+                <div class="comp-price-box">
+                  <span class="comp-price-label">${isSold ? 'Precio Competidor' : 'Precio Sugerido'}</span>
+                  <span class="comp-price-value">$${p.estimated_resale_clp.toLocaleString('es-CL')} CLP</span>
+                </div>
+                <div class="comp-price-box">
+                  <span class="comp-price-label">Margen Neto Unitario</span>
+                  <span class="comp-price-value" style="color: #10b981;">+$${marginClp.toLocaleString('es-CL')} CLP</span>
+                </div>
+              </div>
+              ${isSold ? `
+              <a href="${p.ml_link}" target="_blank" class="ml-view-link">
+                Ver publicación de Mercado Libre ↗
+              </a>
+              ` : '<span style="font-size: 0.7rem; color: var(--text-muted); font-style: italic;">Oportunidad sin competencia directa</span>'}
+            </div>
+          </div>
+        </div>
+
+        <div class="warning-box" style="margin-bottom: 1.5rem;">
+          <strong>⚠️ Nota de Internación y Regulación:</strong> ${p.risks}
+        </div>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="${p.alibaba_link}" target="_blank" class="alibaba-action-btn" style="flex: 1; text-align: center; justify-content: center; margin: 0; padding: 0.8rem 1.5rem;">
+            Negociar con Proveedor en Alibaba <span>↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 // Rendering Card Layout in Grid
 function renderProductCards(products) {
   productsContainer.innerHTML = '';
@@ -337,6 +576,48 @@ function renderProductCards(products) {
     for (let i = 1; i <= 5; i++) {
       starsHtml += i <= roundedStars ? '★' : '☆';
     }
+
+    const landedCostClp = calculateUnitLandedCost(p);
+    const marginClp = p.estimated_resale_clp - landedCostClp;
+    const realMarginPercent = Math.round((marginClp / p.estimated_resale_clp) * 100);
+
+    const isSold = p.photo_match && p.photo_match !== 'No vendido en Chile';
+    let badgeClass = 'none';
+    if (isSold) {
+      badgeClass = p.photo_match.includes('Idéntico') || p.photo_match.includes('98%') || p.photo_match.includes('99%') ? '' : 'similar';
+    }
+
+    const competitorPanelHtml = `
+      <div class="competitor-match-panel">
+        <div class="match-header-row">
+          <span class="match-source">🔍 ML CHILE MATCH</span>
+          <span class="match-confidence ${badgeClass}">${p.photo_match}</span>
+        </div>
+        <div class="match-price-comparison">
+          <div class="comp-price-box">
+            <span class="comp-price-label">${isSold ? 'Precio Competidor' : 'Precio Sugerido'}</span>
+            <span class="comp-price-value">$${p.estimated_resale_clp.toLocaleString('es-CL')} CLP</span>
+          </div>
+          <div class="comp-price-box">
+            <span class="comp-price-label">Landed Unitario</span>
+            <span class="comp-price-value" style="color: #fbbf24;">$${landedCostClp.toLocaleString('es-CL')} CLP</span>
+          </div>
+        </div>
+        <div class="margin-real-highlight">
+          <span class="margin-real-label">${isSold ? 'Margen vs Competidor' : 'Margen Neto Esperado'}</span>
+          <span class="margin-real-value ${marginClp >= 0 ? 'positive' : 'negative'}">
+            $${marginClp.toLocaleString('es-CL')} CLP (${realMarginPercent}%)
+          </span>
+        </div>
+        ${isSold ? `
+        <div style="margin-top: 0.5rem; text-align: right;">
+          <a href="${p.ml_link}" target="_blank" class="ml-view-link">
+            Ver en Mercado Libre ↗
+          </a>
+        </div>
+        ` : ''}
+      </div>
+    `;
     
     card.innerHTML = `
       <div class="score-badge" style="top: 1.25rem; right: 1.25rem; z-index: 10;">
@@ -349,34 +630,32 @@ function renderProductCards(products) {
       </div>
       ` : ''}
       <div class="product-content" style="${p.thumbnail ? 'padding: 1.25rem;' : 'padding-top: 2rem;'}">
-        <h4 class="product-title" style="padding-right: 6rem;">${p.name}</h4>
-        <div class="supplier-meta">
+        <h4 class="product-title" style="padding-right: 6rem; margin-top: 0; min-height: 2.8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${p.name}</h4>
+        <div class="supplier-meta" style="margin-bottom: 0.75rem;">
           <span>💼 Alibaba B2B</span>
           <span>📅 ${p.supplier_years} años activo</span>
         </div>
         
-        <div class="badges-row">
+        <div class="badges-row" style="margin-bottom: 1rem;">
           <span class="tag-badge verified" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">✓ Verified Supplier</span>
           <span class="tag-badge ${p.competition_chile.toLowerCase()}">📊 Competencia: ${p.competition_chile}</span>
           <span class="tag-badge ${p.import_difficulty.toLowerCase()}">🚚 Importación: ${p.import_difficulty}</span>
         </div>
 
-        <a href="https://listado.mercadolibre.cl/${encodeURIComponent(p.name)}" target="_blank" class="mercadolibre-link" style="color: #fbbf24; font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-top: -0.5rem; margin-bottom: 1.25rem; font-weight: 600; padding: 0.25rem 0.5rem; border-radius: 6px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); width: fit-content; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(245, 158, 11, 0.15)'; this.style.borderColor='rgba(245, 158, 11, 0.4)';" onmouseout="this.style.background='rgba(245, 158, 11, 0.08)'; this.style.borderColor='rgba(245, 158, 11, 0.2)';">
-          🔍 Ver competencia en Mercado Libre Chile ↗
-        </a>
+        ${competitorPanelHtml}
 
-        <div class="financial-grid">
+        <div class="financial-grid" style="margin-bottom: 1rem;">
           <div class="fin-item">
-            <span class="fin-label">Costo FOB Unitario</span>
+            <span class="fin-label">FOB Unitario</span>
             <span class="fin-val">$${p.unit_cost_usd.toFixed(2)} USD</span>
           </div>
           <div class="fin-item">
-            <span class="fin-label">Resale Estimado Chile</span>
-            <span class="fin-val">$${p.estimated_resale_clp.toLocaleString('es-CL')} CLP</span>
+            <span class="fin-label">Landed Cost Est.</span>
+            <span class="fin-val" style="color: #fbbf24;">$${landedCostClp.toLocaleString('es-CL')} CLP</span>
           </div>
           <div class="fin-item">
-            <span class="fin-label">Margen Neto Teórico</span>
-            <span class="fin-val highlight">${p.estimated_margin_percent}%</span>
+            <span class="fin-label">Margen Real</span>
+            <span class="fin-val highlight">${realMarginPercent}%</span>
           </div>
           <div class="fin-item">
             <span class="fin-label">Peso Promedio</span>
@@ -384,21 +663,21 @@ function renderProductCards(products) {
           </div>
         </div>
 
-        <div class="text-panel">
-          <h5>📈 Ángulo de Ventas:</h5>
-          <p>${p.selling_angle}</p>
+        <div class="text-panel" style="margin-bottom: 0.75rem;">
+          <h5 style="margin-top: 0; margin-bottom: 0.25rem;">📈 Ángulo de Ventas:</h5>
+          <p style="margin: 0; font-size: 0.8rem; line-height: 1.4;">${p.selling_angle}</p>
         </div>
 
-        <div class="text-panel">
-          <h5>💡 Viabilidad en Chile:</h5>
-          <p>${p.success_reason}</p>
+        <div class="text-panel" style="margin-bottom: 1rem;">
+          <h5 style="margin-top: 0; margin-bottom: 0.25rem;">💡 Viabilidad en Chile:</h5>
+          <p style="margin: 0; font-size: 0.8rem; line-height: 1.4;">${p.success_reason}</p>
         </div>
 
-        <div class="warning-box">
+        <div class="warning-box" style="margin-bottom: 1rem;">
           <strong>⚠️ Alerta/Restricción:</strong> ${p.risks}
         </div>
 
-        <a href="${p.alibaba_link}" target="_blank" class="alibaba-action-btn">
+        <a href="${p.alibaba_link}" target="_blank" class="alibaba-action-btn" style="text-align: center; display: block; width: auto; margin-top: 0.5rem;">
           Ver Proveedor en Alibaba <span>↗</span>
         </a>
       </div>

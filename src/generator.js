@@ -18,352 +18,256 @@ export function generateAnalysis(query) {
     category = "agricultural";
   }
 
-  const products = [];
   let summary = {};
+  
+  const categoryNaming = {
+    "electronics": [
+      `${title} Pro Inteligente (Edición Premium)`,
+      `${title} Compacto USB-C (Batería Integrada)`,
+      `${title} Standard de Red Eléctrica (220V AC)`,
+      `${title} Ultra-Mini de Bolsillo Recargable`,
+      `${title} Inalámbrico con Control por App WiFi`,
+      `${title} con Pantalla LCD Táctil Digital`,
+      `${title} con Sensor de Presencia Inteligente`,
+      `${title} de Alta Potencia con Motor Brushless`,
+      `${title} Portátil con Luz LED de Emergencia`,
+      `${title} Lite Económico (Carga Micro-USB)`,
+      `${title} de Escritorio con Soporte Magnético`,
+      `${title} Profesional con Maleta de Transporte`,
+      `${title} con Carga por Panel Solar Integrado`,
+      `${title} Impermeable para Exterior (IP67)`,
+      `${title} Inteligente con Control por Voz (Alexa)`,
+      `${title} Dual de Alta Eficiencia Energética`,
+      `${title} Silencioso con Amortiguador de Ruido`,
+      `${title} con Batería de Respaldo Integrada`,
+      `${title} Premium con Chasis de Aluminio CNC`,
+      `${title} Industrial de Alta Resistencia`
+    ],
+    "cosmetics_health": [
+      `${title} Suave Hidratante (Fórmula Vegana)`,
+      `Kit de Aplicadores y Accesorios para ${title}`,
+      `${title} Corporal Nutritivo (Sourcing Estándar)`,
+      `${title} de Base Botánica Natural (Fórmula Orgánica)`,
+      `Set de Esponjas y Limpiadores para ${title}`,
+      `${title} Reparador de Noche con Ácido Hialurónico`,
+      `${title} Premium con Extracto de Aloe Vera`,
+      `Estuche Organizador de Cosméticos para ${title}`,
+      `${title} Exfoliante de Carbón Activo`,
+      `${title} Revitalizante con Vitamina C`,
+      `Mini Envase de Viaje Vacío para ${title} (Pack de 6)`,
+      `${title} Hipoalergénico para Piel Sensible`,
+      `${title} Diario Reparador con Filtro UV`,
+      `Cepillo Limpiador Facial Eléctrico para ${title}`,
+      `${title} Hidratante Intensivo de Labios`,
+      `${title} Reafirmante con Colágeno Marino`,
+      `Set de Brochas Profesionales para Aplicación de ${title}`,
+      `${title} Purificante de Arcilla Volcánica`,
+      `${title} Calmante con Aceite Esencial de Camomila`,
+      `Espejo de Maquillaje LED para Aplicación de ${title}`
+    ],
+    "food_contact": [
+      `${title} de Silicona Premium (BPA-Free / Plegable)`,
+      `${title} Eléctrico Recargable USB (Express)`,
+      `${title} Metálico Tradicional (Acero Inoxidable)`,
+      `${title} de Madera de Acacia Curada`,
+      `${title} con Tapa Hermética Antiderrames`,
+      `Set de Moldes de Repostería para ${title}`,
+      `${title} de Vidrio de Borosilicato Templado`,
+      `Dispensador Automático Organizador de ${title}`,
+      `${title} Térmico con Aislamiento al Vacío`,
+      `${title} de Plástico Reciclado Eco-Friendly`,
+      `${title} Multifuncional con Cuchillas de Acero`,
+      `Soporte Magnético de Pared para ${title}`,
+      `${title} Ajustable para Conservación de Alimentos`,
+      `${title} de Cerámica Esmaltada Resistente`,
+      `Set de Limpieza y Brochas de Mantenimiento para ${title}`,
+      `${title} Plegable de Camping Ultra-Ligero`,
+      `${title} de Hierro Fundido Curado`,
+      `Temporizador de Cocina Digital para ${title}`,
+      `${title} de Teflón Antiadherente Reforzado`,
+      `Balanza Digital de Cuchara Medidora para ${title}`
+    ],
+    "agricultural": [
+      `${title} Premium de Fibra Sintética (Oxford Rígido)`,
+      `${title} Rústico de Madera de Bamboo Natural`,
+      `${title} Standard Económico (Importación Masiva)`,
+      `${title} Ecológico de Fibra de Coco Biodegradable`,
+      `${title} Resistente a la Intemperie con Filtro UV`,
+      `Soporte Metálico Reforzado para Estructura de ${title}`,
+      `${title} Hidropónico Vertical con Auto-riego`,
+      `Kit de Herramientas de Mantenimiento para ${title}`,
+      `${title} Plegable Portátil para Mascotas`,
+      `${title} de Plástico Reciclado de Alta Durabilidad`,
+      `${title} de Algodón Orgánico Lavable`,
+      `Sensor de Humedad y Temperatura WiFi para ${title}`,
+      `${title} Colgante de Yute Natural Tejido a Mano`,
+      `${title} de Acero Galvanizado Anticorrosivo`,
+      `Set de Iluminación LED de Cultivo para ${title}`,
+      `${title} Plegable con Ruedas para Transporte`,
+      `${title} de Cuero Sintético Premium Impermeable`,
+      `Bolsas de Compresión y Almacenamiento para ${title}`,
+      `${title} con Sombreado de Malla Respirable`,
+      `Pulverizador de Presión Manual para Cuidado de ${title}`
+    ],
+    "general": [
+      `${title} Modular Organizador (Edición Reforzada)`,
+      `${title} Ultra-Compacto de Viaje Plegable`,
+      `${title} Clásico de Lona / Acrílico Transparente`,
+      `${title} Antideslizante de Silicona Multiuso` ,
+      `Set de Cajas Organizadoras Apilables para ${title}`,
+      `${title} Magnético con Adhesivo 3M para Pared`,
+      `${title} Impermeable de Neopreno con Cierre`,
+      `${title} de Estilo Nórdico con Detalles de Madera`,
+      `Soporte de Altura Ajustable Ergonómico para ${title}`,
+      `${title} Económico Lite (Pack de 3 Unidades)`,
+      `${title} con Luz LED de Sensor Recargable USB`,
+      `${title} de Cuero PU con Costuras Reforzadas`,
+      `Bolsa de Transporte Protectora Acolchada para ${title}`,
+      `${title} Giratorio 360° para Escritorio / Tocador`,
+      `${title} Autoadhesivo Resistente a la Humedad`,
+      `${title} de Fieltro Ecológico para Almacenamiento`,
+      `${title} con Cierre de Seguridad para Niños`,
+      `${title} de Viaje con Mosquetón de Enganche`,
+      `${title} de Metal Cromado Antióxido`,
+      `Set de Separadores Ajustables para Cajón de ${title}`
+    ]
+  };
 
   if (category === "electronics") {
-    const isWireless = /\b(wireless|wifi|bluetooth|drone|remote)\b/.test(q);
-    
     summary = {
       "best_opportunity": `${title} Inteligente USB-C`,
-      "best_reason": `El modelo alimentado por USB-C evita la homologación obligatoria SEC en Chile (que aplica a enchufes de pared). Ofrece un margen superior al 60% y permite posicionamiento tecnológico moderno sin sobrecostos aduaneros.`,
+      "best_reason": `Los modelos que se cargan mediante USB-C evitan la homologación eléctrica obligatoria ante la SEC en Chile. Ofrecen márgenes por sobre el 60% al esquivar sobrecostos aduaneros de certificación.`,
       "safest_product": `${title} Versión Compacta USB`,
-      "safest_reason": `Al ser compacto y recargable, su peso volumétrico mantiene el flete aéreo económico. No requiere certificaciones especiales en aduanas.`
+      "safest_reason": `Al ser compacto, reduce al mínimo el peso volumétrico de flete y no requiere trámites de homologación de enchufe.`
     };
-
-    products.push({
-      id: "elec_premium",
-      name: `${title} Pro Inteligente (Edición Premium)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' pro')}`,
-      supplier_verified: true,
-      supplier_years: 7,
-      unit_cost_usd: 16.80,
-      estimated_resale_clp: 49990,
-      estimated_margin_percent: 58,
-      competition_chile: "Medium",
-      import_difficulty: "Moderate",
-      weight_kg: 1.2,
-      volume_cbm: 0.003,
-      selling_angle: `Dispositivo ${title} premium con pantalla digital inteligente y control de potencia avanzado.`,
-      success_reason: "Excelente valor percibido y demanda estable de entusiastas tecnológicos en Chile.",
-      risks: "Si el proveedor incluye cargador de 220V convencional en la caja, requerirá trámite y homologación ante la SEC chilena.",
-      score: 4.1
-    });
-
-    products.push({
-      id: "elec_usb",
-      name: `${title} Compacto USB-C (Batería Integrada)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' mini usb')}`,
-      supplier_verified: true,
-      supplier_years: 5,
-      unit_cost_usd: 6.20,
-      estimated_resale_clp: 29990,
-      estimated_margin_percent: 72,
-      competition_chile: "Low",
-      import_difficulty: "Easy",
-      weight_kg: 0.45,
-      volume_cbm: 0.001,
-      selling_angle: `Modelo de viaje ultra-portátil recargable vía USB-C. Sin cables molestos.`,
-      success_reason: "Cumple las reglas ideales de importación: liviano, sin barrera SEC, margen alto y precio de venta ideal (CLP $29.990).",
-      risks: "Las baterías de litio de alta densidad a veces sufren restricciones en flete aéreo rápido (requieren declaración MSDS).",
-      score: 4.7
-    });
-
-    products.push({
-      id: "elec_basic",
-      name: `${title} Standard de Red Eléctrica (220V AC)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' 220v')}`,
-      supplier_verified: true,
-      supplier_years: 4,
-      unit_cost_usd: 12.00,
-      estimated_resale_clp: 34990,
-      estimated_margin_percent: 32,
-      competition_chile: "High",
-      import_difficulty: "Difficult",
-      weight_kg: 1.6,
-      volume_cbm: 0.005,
-      selling_angle: `Dispositivo tradicional para uso continuo en el hogar conectado directamente a la corriente.`,
-      success_reason: "Fácil de vender en retail tradicional, pero con poco valor añadido.",
-      risks: "**HOMOLOGACIÓN SEC CRÍTICA:** Al tener enchufe directo de 220V, aduanas exige certificación oficial. Vender sin sello SEC expone al negocio a multas graves.",
-      score: 2.8
-    });
-
   } else if (category === "cosmetics_health") {
     summary = {
-      "best_opportunity": `${title} de Base Botánica Natural (Fórmula Orgánica)`,
-      "best_reason": `El mercado de belleza y cuidado personal en Chile prefiere productos orgánicos con empaques premium. A pesar de la alta exigencia regulatoria, sus márgenes superan el 75%.`,
-      "safest_product": `Ninguno (Riesgo Sanitario Alto)`,
-      "safest_reason": `Los productos de aplicación cutánea o ingesta requieren registro del ISP (Instituto de Salud Pública). El riesgo de retención y destrucción en aduana es altísimo para principiantes.`
+      "best_opportunity": `${title} de Base Botánica (Fórmula Orgánica)`,
+      "best_reason": `Los cosméticos e insumos orgánicos de cuidado personal tienen una demanda premium con precios elevados de reventa. Aunque requieren ISP, tienen márgenes enormes.`,
+      "safest_product": `Accesorios e Instrumentos para ${title}`,
+      "safest_reason": `Cualquier aplicador o estuche de transporte no ingresa a la piel, por lo tanto **NO requiere registro sanitario del ISP**, logrando internarse sin problemas.`
     };
-
-    products.push({
-      id: "cosm_premium",
-      name: `${title} Suave Hidratante (Fórmula Vegana)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' organic vegan')}`,
-      supplier_verified: true,
-      supplier_years: 6,
-      unit_cost_usd: 2.50,
-      estimated_resale_clp: 19990,
-      estimated_margin_percent: 82,
-      competition_chile: "Low",
-      import_difficulty: "Difficult",
-      weight_kg: 0.2,
-      volume_cbm: 0.0003,
-      selling_angle: "Cuidado de la piel de rápida absorción con ingredientes certificados de origen vegetal.",
-      "success_reason": "Baja competencia en Chile para marcas independientes importadas de forma formal con registro sanitario.",
-      risks: "**EXIGENCIA ISP OBLIGATORIA:** Requiere habilitación de bodega cosmética autorizada por el ISP y análisis de laboratorio local.",
-      score: 3.5
-    });
-
-    products.push({
-      id: "cosm_set",
-      name: `Kit de Aplicadores y Accesorios para ${title}`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' tools accessories')}`,
-      supplier_verified: true,
-      supplier_years: 5,
-      unit_cost_usd: 3.80,
-      estimated_resale_clp: 24990,
-      estimated_margin_percent: 78,
-      competition_chile: "Medium",
-      import_difficulty: "Easy",
-      weight_kg: 0.35,
-      volume_cbm: 0.0008,
-      selling_angle: `Conjunto ergonómico de pinceles, aplicadores y organizadores profesionales para ${title}.`,
-      "success_reason": "Al ser accesorios de aplicación (y no la fórmula líquida/polvo en sí), **NO requiere registro ISP**. Excelente alternativa de importación fácil.",
-      "risks": "La competencia en diseño y calidad visual es intensa. Requiere un empaque vistoso para justificar el precio.",
-      score: 4.6
-    });
-
-    products.push({
-      id: "cosm_basic",
-      name: `${title} Corporal Nutritivo (Sourcing Estándar)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' mass market')}`,
-      supplier_verified: true,
-      supplier_years: 4,
-      unit_cost_usd: 1.20,
-      estimated_resale_clp: 8990,
-      estimated_margin_percent: 30,
-      competition_chile: "High",
-      import_difficulty: "Difficult",
-      weight_kg: 0.25,
-      volume_cbm: 0.0004,
-      selling_angle: `Formulación masiva para uso regular y familiar.`,
-      "success_reason": "Bajo costo unitario en Alibaba, pero difícil competir contra marcas establecidas de supermercado (Nivea, Dove, etc.).",
-      "risks": "Alto riesgo de ser bloqueado por SEREMI de Salud o ISP en internación aduanera si se importa de forma simplificada por Courier.",
-      score: 2.1
-    });
-
   } else if (category === "food_contact") {
     summary = {
-      "best_opportunity": `${title} de Silicona de Grado Alimentario (Plegable)`,
-      "best_reason": `El nicho de cocina en Chile valora mucho el diseño moderno y el ahorro de espacio. Al ser de silicona platino, es fácil obtener la certificación libre de BPA y su peso ligero abarata el flete.`,
-      "safest_product": `${title} Organizador o Utensilio Seco`,
-      "safest_reason": `Los productos que no tocan directamente alimentos húmedos o calientes tienen menor escrutinio de Seremi de Salud en aduanas.`
+      "best_opportunity": `${title} de Silicona Premium (BPA-Free)`,
+      "best_reason": `La silicona plegable o de grado alimenticio es liviana y muy cotizada en cocinas modernas. Es muy fácil de importar en volumen.`,
+      "safest_product": `${title} Metálico de Acero Inoxidable`,
+      "safest_reason": `El acero inoxidable tradicional no contiene plásticos ni resinas complejas, reduciendo sospechas en fiscalizaciones sanitarias en puertos.`
     };
-
-    products.push({
-      id: "food_silicone",
-      name: `${title} de Silicona Premium (BPA-Free / Plegable)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' silicone bpa free')}`,
-      supplier_verified: true,
-      supplier_years: 8,
-      unit_cost_usd: 2.80,
-      estimated_resale_clp: 18990,
-      estimated_margin_percent: 79,
-      competition_chile: "Low",
-      import_difficulty: "Easy",
-      weight_kg: 0.2,
-      volume_cbm: 0.0004,
-      selling_angle: `Utensilio de cocina premium de silicona platino, resistente al calor hasta 220°C y libre de BPA.`,
-      "success_reason": "Alta demanda hogareña y de repostería. Los proveedores serios de Alibaba te proveen el certificado FDA de inmediato.",
-      risks: "En aduana chilena, la Seremi de Salud podría fiscalizar al azar para constatar que el plástico cumple la norma sanitaria de inocuidad.",
-      score: 4.8
-    });
-
-    products.push({
-      id: "food_electric",
-      name: `${title} Eléctrico Recargable USB (Express)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' electric usb')}`,
-      supplier_verified: true,
-      supplier_years: 5,
-      unit_cost_usd: 6.90,
-      estimated_resale_clp: 29990,
-      estimated_margin_percent: 63,
-      competition_chile: "Medium",
-      import_difficulty: "Easy",
-      weight_kg: 0.5,
-      volume_cbm: 0.0015,
-      selling_angle: `Dispositivo recargable inalámbrico para facilitar la preparación culinaria.`,
-      "success_reason": "Valor percibido alto debido a la automatización de tareas en la cocina. Carga USB evita la SEC.",
-      "risks": "La mezcla de electrónica con agua en el lavado aumenta las tasas de falla. Requiere manual en español.",
-      score: 4.3
-    });
-
-    products.push({
-      id: "food_steel",
-      name: `${title} Metálico Tradicional (Acero Inoxidable)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' stainless steel')}`,
-      supplier_verified: true,
-      supplier_years: 9,
-      unit_cost_usd: 4.50,
-      estimated_resale_clp: 16990,
-      estimated_margin_percent: 45,
-      competition_chile: "High",
-      import_difficulty: "Easy",
-      weight_kg: 0.8,
-      volume_cbm: 0.002,
-      selling_angle: `Estructura clásica de acero inoxidable quirúrgico ultra resistente.`,
-      "success_reason": "Duradero y confiable, pero con fuerte competencia local de marcas grandes de retail (Tramontina, Magefesa).",
-      "risks": "El peso del acero aumenta el costo del flete marítimo consolidado por kilogramo, reduciendo el margen real.",
-      score: 3.5
-    });
-
   } else if (category === "agricultural") {
     summary = {
-      "best_opportunity": `${title} Ergonómico / Diseño Textil Premium`,
-      "best_reason": `Al orientarse a la comodidad o diseño premium de mascotas u hogar, se esquivan las regulaciones agrícolas duras. Excelente nicho de compra emocional.`,
-      "safest_product": `${title} en base a Polímeros Sintéticos`,
-      "safest_reason": `Las fibras plásticas y metales procesados evitan las inspecciones de aduana biológica (SAG), a diferencia de la madera cruda o el cuero vegetal.`
+      "best_opportunity": `${title} Sintético Oxford Rígido`,
+      "best_reason": `El uso de fibras sintéticas evita la exigente fiscalización del SAG. Tiene un nicho enorme en hogares y transporte de mascotas.`,
+      "safest_product": `${title} de Fibra Sintética 100%`,
+      "safest_reason": `Al no contener maderas ni fibras vegetales crudas, pasa la aduana chilena de forma instantánea sin requerir certificados fitosanitarios.`
     };
-
-    products.push({
-      id: "agri_processed",
-      name: `${title} Premium de Fibra Sintética Reforzada`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' premium oxford plastic')}`,
-      supplier_verified: true,
-      supplier_years: 6,
-      unit_cost_usd: 4.80,
-      estimated_resale_clp: 24990,
-      estimated_margin_percent: 72,
-      competition_chile: "Medium",
-      import_difficulty: "Easy",
-      weight_kg: 0.5,
-      volume_cbm: 0.0018,
-      selling_angle: `Diseño ergonómico lavable confeccionado con poliéster Oxford de alta densidad.`,
-      "success_reason": "Al ser 100% sintético, **NO requiere inspección del SAG**. Ideal para venta masiva en Mercado Libre.",
-      "risks": "Muchos competidores informales de baja gama. Necesitas destacar las costuras reforzadas y cierres premium.",
-      score: 4.5
-    });
-
-    products.push({
-      id: "agri_wood",
-      name: `${title} Rústico de Madera de Bamboo Natural`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' bamboo wooden')}`,
-      supplier_verified: true,
-      supplier_years: 7,
-      unit_cost_usd: 5.20,
-      estimated_resale_clp: 29990,
-      estimated_margin_percent: 65,
-      competition_chile: "Low",
-      import_difficulty: "Moderate",
-      weight_kg: 0.9,
-      volume_cbm: 0.0035,
-      selling_angle: `Estructura ecológica de bamboo procesado, antibacterial y biodegradable.`,
-      "success_reason": "Excelente estética verde muy valorada por el consumidor milenial en Chile.",
-      "risks": "**ALERTA SAG:** Productos que incorporen madera o fibras vegetales sin tratar pueden ser retenidos por el SAG para certificar la ausencia de plagas.",
-      score: 4.0
-    });
-
-    products.push({
-      id: "agri_basic",
-      name: `${title} Standard Económico (Importación Masiva)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' basic')}`,
-      supplier_verified: true,
-      supplier_years: 3,
-      unit_cost_usd: 1.90,
-      estimated_resale_clp: 9990,
-      estimated_margin_percent: 54,
-      competition_chile: "High",
-      import_difficulty: "Easy",
-      weight_kg: 0.25,
-      volume_cbm: 0.0006,
-      selling_angle: `Modelo clásico y funcional para tareas básicas diarias.`,
-      "success_reason": "Costo bajísimo, pero difícil de diferenciar ante la competencia en ferias y persas locales.",
-      "risks": "La calidad de los materiales plásticos puede degradarse rápidamente bajo el sol, aumentando reclamos post-venta.",
-      score: 3.4
-    });
-
   } else {
-    // General / Textile / Non-electronic physical products
     summary = {
-      "best_opportunity": `${title} de Diseño Ergonómico / Organizador`,
-      "best_reason": `Los productos de uso diario o almacenamiento que no tienen baterías, madera cruda o contacto directo húmedo con alimentos, son de internación express. El éxito comercial radica en resolver la desorganización hogareña o laboral.`,
-      "safest_product": `${title} Clásico de Poliéster / Plástico Rígido`,
-      "safest_reason": `Producto físico simple sin ninguna restricción regulatoria chilena (no requiere SEC, ISP, SAG, ni Subtel). Excelente para importar vía Courier express en cajas pequeñas.`
+      "best_opportunity": `${title} Organizador Modular`,
+      "best_reason": `Los productos de organización doméstica tienen una gran tracción visual en e-commerce. Sin baterías ni cables, su importación es 100% segura y directa.`,
+      "safest_product": `${title} Ultra-Compacto Plegable`,
+      "safest_reason": `Un artículo básico de plástico o tela sin componentes eléctricos ni químicos entra directamente bajo el régimen general de importación express.`
     };
-
-    products.push({
-      id: "gen_premium",
-      name: `${title} Modular Organizador (Edición Reforzada)`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' organizer organizer premium')}`,
-      supplier_verified: true,
-      supplier_years: 6,
-      unit_cost_usd: 5.80,
-      estimated_resale_clp: 29990,
-      estimated_margin_percent: 71,
-      competition_chile: "Low",
-      import_difficulty: "Easy",
-      weight_kg: 0.6,
-      volume_cbm: 0.002,
-      selling_angle: `Estructura inteligente para maximizar espacios y ordenar ${title} de forma modular.`,
-      "success_reason": "Tendencia en crecimiento por espacios más reducidos en departamentos chilenos.",
-      "risks": "Fácilmente imitable por grandes importadoras de plástico si el producto escala en ventas.",
-      score: 4.6
-    });
-
-    products.push({
-      id: "gen_compact",
-      name: `${title} Ultra-Compacto de Viaje`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' travel compact')}`,
-      supplier_verified: true,
-      supplier_years: 5,
-      unit_cost_usd: 2.20,
-      estimated_resale_clp: 14990,
-      estimated_margin_percent: 81,
-      competition_chile: "Medium",
-      import_difficulty: "Easy",
-      weight_kg: 0.22,
-      volume_cbm: 0.0006,
-      selling_angle: `Versión plegable ultra-liviana diseñada para llevar cómodamente de viaje o en la mochila.`,
-      "success_reason": "Excelente como producto de compra cruzada u obsequio. Flete unitario prácticamente despreciable.",
-      "risks": "Margen total en pesos es más bajo por el bajo precio final; se necesita vender en combos o packs de 2 o 3 unidades.",
-      score: 4.8
-    });
-
-    products.push({
-      id: "gen_standard",
-      name: `${title} Clásico de Lona / Acrílico`,
-      thumbnail: null,
-      alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' basic acrylic classic')}`,
-      supplier_verified: true,
-      supplier_years: 4,
-      unit_cost_usd: 4.10,
-      estimated_resale_clp: 19990,
-      estimated_margin_percent: 54,
-      competition_chile: "High",
-      import_difficulty: "Easy",
-      weight_kg: 0.8,
-      volume_cbm: 0.003,
-      selling_angle: `Modelo tradicional ideal para reposición y almacenamiento estándar.`,
-      "success_reason": "Mercado estable de oficinas y hogares, aunque saturado de importaciones chinas de bajo costo en el barrio Meiggs y retail.",
-      "risks": "Competencia agresiva por precio. Rentabilidad ajustada tras costos logísticos de volumen.",
-      score: 3.5
-    });
   }
+
+  const products = [];
+  const names = categoryNaming[category];
+  
+  names.forEach((name, idx) => {
+    // Generate logical mock financial parameters
+    const unitCost = parseFloat((1.50 + (idx * 1.85) + (idx % 3) * 0.45).toFixed(2));
+    // Resale price in CLP ensuring 50-80% gross margin (CLP cost is unitCost * 950 approximately)
+    const approximateCostClp = unitCost * 950;
+    const markupMultiplier = 2.5 + ((idx % 5) * 0.5); // 2.5x to 4.5x markup
+    let resaleClp = Math.round((approximateCostClp * markupMultiplier) / 1000) * 1000 - 10;
+    if (resaleClp < 4990) resaleClp = 4990;
+    
+    const margin = Math.round(((resaleClp - approximateCostClp) / resaleClp) * 100);
+    
+    // Naming parameters
+    const slug = name.lowerCaseNormalized();
+    const id = `${category.substring(0, 4)}_${idx}`;
+    const alibaba_link = `https://www.alibaba.com/product-detail/${slug}_1600${123400000 + idx}.html`;
+    
+    let photo_match = "No vendido en Chile";
+    let ml_link = "#";
+    if (idx % 4 !== 0) {
+      const matchRates = ["98% (Idéntico)", "96% (Mismo Modelo)", "92% (Similar)"];
+      photo_match = matchRates[idx % 3];
+      ml_link = `https://articulo.mercadolibre.cl/MLC-${500000000 + idx}-${slug}.html`;
+    }
+    
+    // Assign weight and volume
+    const weight = parseFloat((0.1 + (idx * 0.15) + (idx % 2) * 0.05).toFixed(2));
+    const volume = parseFloat((0.0002 + (idx * 0.0006)).toFixed(4));
+    
+    // Specific risks and details per category
+    let risks = "Ningún riesgo regulatorio especial. Producto de internación directa.";
+    let difficulty = "Easy";
+    if (category === "electronics") {
+      if (name.includes("220V") || name.includes("Industrial")) {
+        risks = "**HOMOLOGACIÓN SEC OBLIGATORIA:** Al conectarse directo a 220V, exige sello SEC. El trámite es largo y costoso.";
+        difficulty = "Difficult";
+      } else if (name.includes("App WiFi") || name.includes("Alexa") || name.includes("WiFi")) {
+        risks = "Transmisor de radiofrecuencia de bajo alcance. Subtel podría retener la carga para validación técnica.";
+        difficulty = "Moderate";
+      } else if (name.includes("Batería")) {
+        risks = "La batería de litio interna exige hoja de seguridad MSDS para flete aéreo express.";
+        difficulty = "Easy";
+      }
+    } else if (category === "cosmetics_health") {
+      if (!name.includes("Kit") && !name.includes("Estuche") && !name.includes("Brochas") && !name.includes("Espejo")) {
+        risks = "**ISP OBLIGATORIO:** Producto de uso cutáneo. Exige bodega autorizada por el ISP y análisis químico local.";
+        difficulty = "Difficult";
+      } else {
+        risks = "Al ser un accesorio cosmético sin fórmula líquida, no requiere ISP. Internación directa.";
+        difficulty = "Easy";
+      }
+    } else if (category === "agricultural") {
+      if (name.includes("Bamboo") || name.includes("Madera") || name.includes("Yute")) {
+        risks = "**SAG OBLIGATORIO:** Exige inspección silvoagropecuaria del SAG en aduana y certificado de origen fitosanitario.";
+        difficulty = "Moderate";
+      }
+    } else if (category === "food_contact") {
+      risks = "Se recomienda contar con certificado del fabricante de plástico libre de BPA (BPA-Free) ante inspección sanitaria.";
+      difficulty = "Easy";
+    }
+
+    // Recommendation logic: index 1 is usually the best opportunity
+    const isRecommended = idx === 1;
+    const score = isRecommended ? 4.9 : parseFloat((3.0 + (margin / 30) + (10 - idx % 8) * 0.1).toFixed(1));
+    const finalScore = score > 5.0 ? 5.0 : (score < 2.0 ? 2.0 : score);
+
+    products.push({
+      id,
+      name,
+      thumbnail: null,
+      alibaba_link,
+      ml_link,
+      supplier_verified: idx % 3 !== 0,
+      supplier_years: 3 + (idx % 8),
+      unit_cost_usd: unitCost,
+      estimated_resale_clp: resaleClp,
+      estimated_margin_percent: margin,
+      competition_chile: idx % 5 === 0 ? "High" : (idx % 3 === 0 ? "Medium" : "Low"),
+      import_difficulty: difficulty,
+      weight_kg: weight,
+      volume_cbm: volume,
+      selling_angle: `Variante optimizada de ${title} diseñada para satisfacer la demanda de e-commerce en Santiago.`,
+      success_reason: isRecommended ? "Cumple los 3 pilares: libre de SEC/ISP, peso logístico ligero y margen de ganancia neto superior al 65%." : "Buena alternativa comercial para nicho específico.",
+      risks,
+      score: finalScore,
+      recommended: isRecommended,
+      photo_match
+    });
+  });
+
+  // Sort products so the recommended one is first, followed by score descending
+  products.sort((a, b) => {
+    if (a.recommended) return -1;
+    if (b.recommended) return 1;
+    return b.score - a.score;
+  });
 
   return {
     title,
@@ -371,3 +275,10 @@ export function generateAnalysis(query) {
     products
   };
 }
+
+// Prototype helper method for normalize
+String.prototype.lowerCaseNormalized = function() {
+  return this.toLowerCase()
+    .replace(/[^a-z0-9 ]/g, "")
+    .replace(/\s+/g, "-");
+};
