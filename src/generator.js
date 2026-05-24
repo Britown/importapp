@@ -114,7 +114,7 @@ export function generateAnalysis(query) {
       weight_kg: 0.2,
       volume_cbm: 0.0003,
       selling_angle: "Cuidado de la piel de rápida absorción con ingredientes certificados de origen vegetal.",
-      success_reason": "Baja competencia en Chile para marcas independientes importadas de forma formal con registro sanitario.",
+      "success_reason": "Baja competencia en Chile para marcas independientes importadas de forma formal con registro sanitario.",
       risks: "**EXIGENCIA ISP OBLIGATORIA:** Requiere habilitación de bodega cosmética autorizada por el ISP y análisis de laboratorio local.",
       score: 3.5
     });
@@ -154,8 +154,8 @@ export function generateAnalysis(query) {
       weight_kg: 0.25,
       volume_cbm: 0.0004,
       selling_angle: `Formulación masiva para uso regular y familiar.`,
-      success_reason": "Bajo costo unitario en Alibaba, pero difícil competir contra marcas establecidas de supermercado (Nivea, Dove, etc.).",
-      risks": "Alto riesgo de ser bloqueado por SEREMI de Salud o ISP en internación aduanera si se importa de forma simplificada por Courier.",
+      "success_reason": "Bajo costo unitario en Alibaba, pero difícil competir contra marcas establecidas de supermercado (Nivea, Dove, etc.).",
+      "risks": "Alto riesgo de ser bloqueado por SEREMI de Salud o ISP en internación aduanera si se importa de forma simplificada por Courier.",
       score: 2.1
     });
 
@@ -182,7 +182,7 @@ export function generateAnalysis(query) {
       weight_kg: 0.2,
       volume_cbm: 0.0004,
       selling_angle: `Utensilio de cocina premium de silicona platino, resistente al calor hasta 220°C y libre de BPA.`,
-      success_reason": "Alta demanda hogareña y de repostería. Los proveedores serios de Alibaba te proveen el certificado FDA de inmediato.",
+      "success_reason": "Alta demanda hogareña y de repostería. Los proveedores serios de Alibaba te proveen el certificado FDA de inmediato.",
       risks: "En aduana chilena, la Seremi de Salud podría fiscalizar al azar para constatar que el plástico cumple la norma sanitaria de inocuidad.",
       score: 4.8
     });
@@ -222,8 +222,8 @@ export function generateAnalysis(query) {
       weight_kg: 0.8,
       volume_cbm: 0.002,
       selling_angle: `Estructura clásica de acero inoxidable quirúrgico ultra resistente.`,
-      success_reason": "Duradero y confiable, pero con fuerte competencia local de marcas grandes de retail (Tramontina, Magefesa).",
-      risks": "El peso del acero aumenta el costo del flete marítimo consolidado por kilogramo, reduciendo el margen real.",
+      "success_reason": "Duradero y confiable, pero con fuerte competencia local de marcas grandes de retail (Tramontina, Magefesa).",
+      "risks": "El peso del acero aumenta el costo del flete marítimo consolidado por kilogramo, reduciendo el margen real.",
       score: 3.5
     });
 
@@ -270,8 +270,8 @@ export function generateAnalysis(query) {
       weight_kg: 0.9,
       volume_cbm: 0.0035,
       selling_angle: `Estructura ecológica de bamboo procesado, antibacterial y biodegradable.`,
-      success_reason": "Excelente estética verde muy valorada por el consumidor milenial en Chile.",
-      risks": "**ALERTA SAG:** Productos que incorporen madera o fibras vegetales sin tratar pueden ser retenidos por el SAG para certificar la ausencia de plagas.",
+      "success_reason": "Excelente estética verde muy valorada por el consumidor milenial en Chile.",
+      "risks": "**ALERTA SAG:** Productos que incorporen madera o fibras vegetales sin tratar pueden ser retenidos por el SAG para certificar la ausencia de plagas.",
       score: 4.0
     });
 
@@ -290,8 +290,8 @@ export function generateAnalysis(query) {
       weight_kg: 0.25,
       volume_cbm: 0.0006,
       selling_angle: `Modelo clásico y funcional para tareas básicas diarias.`,
-      success_reason": "Costo bajísimo, pero difícil de diferenciar ante la competencia en ferias y persas locales.",
-      risks": "La calidad de los materiales plásticos puede degradarse rápidamente bajo el sol, aumentando reclamos post-venta.",
+      "success_reason": "Costo bajísimo, pero difícil de diferenciar ante la competencia en ferias y persas locales.",
+      "risks": "La calidad de los materiales plásticos puede degradarse rápidamente bajo el sol, aumentando reclamos post-venta.",
       score: 3.4
     });
 
@@ -359,8 +359,8 @@ export function generateAnalysis(query) {
       weight_kg: 0.8,
       volume_cbm: 0.003,
       selling_angle: `Modelo tradicional ideal para reposición y almacenamiento estándar.`,
-      success_reason": "Mercado estable de oficinas y hogares, aunque saturado de importaciones chinas de bajo costo en el barrio Meiggs y retail.",
-      risks": "Competencia agresiva por precio. Rentabilidad ajustada tras costos logísticos de volumen.",
+      "success_reason": "Mercado estable de oficinas y hogares, aunque saturado de importaciones chinas de bajo costo en el barrio Meiggs y retail.",
+      "risks": "Competencia agresiva por precio. Rentabilidad ajustada tras costos logísticos de volumen.",
       score: 3.5
     });
   }
