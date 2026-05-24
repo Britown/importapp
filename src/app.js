@@ -1,5 +1,6 @@
 import { curatedData } from './data.js';
 import { generateAnalysis } from './generator.js';
+import { costData } from './costData.js';
 
 // Exchange rate setting: 1 USD = 950 CLP (Stable commercial estimate)
 const USD_TO_CLP = 950;
@@ -49,7 +50,86 @@ const summarySafeDesc = document.getElementById('summary-safe-desc');
 // Active state report data
 let activeReport = null;
 
+// ==========================================
+// ADVANCED COSTS PLANILLA ELEMENTS & STATE
+// ==========================================
+const tabSourcingBtn = document.getElementById('tab-sourcing-btn');
+const tabCostsBtn = document.getElementById('tab-costs-btn');
+const sourcingTabContent = document.getElementById('sourcing-tab-content');
+const costsTabContent = document.getElementById('costs-tab-content');
+
+const shipBtnAereo = document.getElementById('ship-btn-aereo');
+const shipBtnMaritimo = document.getElementById('ship-btn-maritimo');
+
+const costExchangeRate = document.getElementById('cost-exchange-rate');
+const costDivisor = document.getElementById('cost-divisor');
+const costRefExwork = document.getElementById('cost-ref-exwork');
+const costRefFreight = document.getElementById('cost-ref-freight');
+const costRefSeguro = document.getElementById('cost-ref-seguro');
+const costAutoCalc = document.getElementById('cost-auto-calc');
+
+const localExpensesList = document.getElementById('local-expenses-list');
+const addExpenseBtn = document.getElementById('add-expense-btn');
+
+const costStatTotalClp = document.getElementById('cost-stat-total-clp');
+const costStatTotalUnits = document.getElementById('cost-stat-total-units');
+const costStatTotalCif = document.getElementById('cost-stat-total-cif');
+
+const addProductRowBtn = document.getElementById('add-product-row-btn');
+const resetCostDataBtn = document.getElementById('reset-cost-data-btn');
+const exportCsvBtn = document.getElementById('export-csv-btn');
+const spreadsheetTbody = document.getElementById('spreadsheet-tbody');
+
+// Table Row Totals Elements
+const totalRowUnits = document.getElementById('total-row-units');
+const totalRowFob = document.getElementById('total-row-fob');
+const totalRowFreight = document.getElementById('total-row-freight');
+const totalRowSeguro = document.getElementById('total-row-seguro');
+const totalRowCif = document.getElementById('total-row-cif');
+const totalRowIva = document.getElementById('total-row-iva');
+const totalRowLocal = document.getElementById('total-row-local');
+const totalRowDapBruto = document.getElementById('total-row-dap-bruto');
+const totalRowDapBrutoClp = document.getElementById('total-row-dap-bruto-clp');
+const totalRowDapNet = document.getElementById('total-row-dap-net');
+const totalRowDapNetClp = document.getElementById('total-row-dap-net-clp');
+const totalRowAvgNetClp = document.getElementById('total-row-avg-net-clp');
+const totalRowAvgVentaClp = document.getElementById('total-row-avg-venta-clp');
+
+let currentCostMethod = 'aereo'; // 'aereo' or 'maritimo'
+let costState = {
+  aereo: {
+    usd_clp: 704,
+    divisor: 18,
+    ref_exwork: 350,
+    ref_freight: 780,
+    ref_seguro: 0,
+    auto_calc: false,
+    services: [
+      { name: "Servicio DHL", value: 100 }
+    ],
+    products: []
+  },
+  maritimo: {
+    usd_clp: 704,
+    divisor: 18,
+    ref_exwork: 7290,
+    ref_freight: 2800,
+    ref_seguro: 50,
+    auto_calc: false,
+    services: [
+      { name: "Gastos portuarios", value: 250 },
+      { name: "Honorarios AG ADUANA", value: 223 },
+      { name: "Apertura de Manifiesto", value: 63.92 }
+    ],
+    products: []
+  }
+};
+
 function init() {
+  // Initialize spreadsheet cost state values from costData.js
+  initCostState();
+  loadCostStateIntoInputs();
+
   // Search Form Submit
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -104,6 +184,25 @@ function init() {
     labelResalePrice.textContent = `$${numVal.toLocaleString('es-CL')} CLP`;
     calculateSimulation();
   });
+
+  // Cost Planner Navigation Tabs
+  tabSourcingBtn.addEventListener('click', () => {
+    tabSourcingBtn.classList.add('active');
+    tabCostsBtn.classList.remove('active');
+    sourcingTabContent.style.display = 'block';
+    costsTabContent.style.display = 'none';
+  });
+
+  tabCostsBtn.addEventListener('click', () => {
+    tabCostsBtn.classList.add('active');
+    tabSourcingBtn.classList.remove('active');
+    costsTabContent.style.display = 'block';
+    sourcingTabContent.style.display = 'none';
+    renderCostsTab();
+  });
+
+  // Bind cost tab controls
+  bindCostsControls();
 }
 
 // Check readyState to prevent module race condition
@@ -240,22 +339,19 @@ function renderProductCards(products) {
     }
     
     card.innerHTML = `
-      <div class="score-badge">
+      <div class="score-badge" style="top: 1.25rem; right: 1.25rem;">
         <span>${starsHtml}</span>
         <span>${p.score.toFixed(1)}</span>
       </div>
-      <div class="product-img-wrapper">
-        <img src="${p.thumbnail}" alt="${p.name}" class="product-img" loading="lazy" referrerpolicy="no-referrer">
-        <span class="supplier-ribbon verified">✓ Verified Supplier</span>
-      </div>
-      <div class="product-content">
-        <h4 class="product-title">${p.name}</h4>
+      <div class="product-content" style="padding-top: 2rem;">
+        <h4 class="product-title" style="padding-right: 6rem;">${p.name}</h4>
         <div class="supplier-meta">
           <span>💼 Alibaba B2B</span>
           <span>📅 ${p.supplier_years} años activo</span>
         </div>
         
         <div class="badges-row">
+          <span class="tag-badge verified" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">✓ Verified Supplier</span>
           <span class="tag-badge ${p.competition_chile.toLowerCase()}">📊 Competencia: ${p.competition_chile}</span>
           <span class="tag-badge ${p.import_difficulty.toLowerCase()}">🚚 Importación: ${p.import_difficulty}</span>
         </div>
@@ -393,3 +489,506 @@ function calculateSimulation() {
     resultsContainer.style.background = 'rgba(239, 68, 68, 0.05)';
   }
 }
+
+// ==========================================================================
+// ADVANCED PLANILLA SPREADSHEET IMPLEMENTATION FUNCTIONS
+// ==========================================================================
+
+function initCostState() {
+  costState.aereo.products = JSON.parse(JSON.stringify(costData.aereo.products));
+  costState.maritimo.products = JSON.parse(JSON.stringify(costData.maritimo.products));
+}
+
+function loadCostStateIntoInputs() {
+  const state = costState[currentCostMethod];
+  costExchangeRate.value = state.usd_clp;
+  costDivisor.value = state.divisor;
+  costRefExwork.value = state.ref_exwork.toFixed(2);
+  costRefFreight.value = state.ref_freight.toFixed(2);
+  costRefSeguro.value = state.ref_seguro.toFixed(2);
+  costAutoCalc.checked = state.auto_calc;
+  
+  costDivisor.disabled = state.auto_calc;
+  costRefExwork.disabled = state.auto_calc;
+}
+
+function bindCostsControls() {
+  // Ship type toggle switchers
+  shipBtnAereo.addEventListener('click', () => {
+    currentCostMethod = 'aereo';
+    shipBtnAereo.classList.add('active');
+    shipBtnMaritimo.classList.remove('active');
+    loadCostStateIntoInputs();
+    renderCostsTab();
+  });
+  
+  shipBtnMaritimo.addEventListener('click', () => {
+    currentCostMethod = 'maritimo';
+    shipBtnMaritimo.classList.add('active');
+    shipBtnAereo.classList.remove('active');
+    loadCostStateIntoInputs();
+    renderCostsTab();
+  });
+  
+  // Global parameter listeners
+  costExchangeRate.addEventListener('input', () => {
+    costState[currentCostMethod].usd_clp = parseFloat(costExchangeRate.value) || 0;
+    recalculateCosts();
+  });
+  
+  costDivisor.addEventListener('input', () => {
+    costState[currentCostMethod].divisor = parseFloat(costDivisor.value) || 1;
+    recalculateCosts();
+  });
+  
+  costRefExwork.addEventListener('input', () => {
+    costState[currentCostMethod].ref_exwork = parseFloat(costRefExwork.value) || 0;
+    recalculateCosts();
+  });
+  
+  costRefFreight.addEventListener('input', () => {
+    costState[currentCostMethod].ref_freight = parseFloat(costRefFreight.value) || 0;
+    recalculateCosts();
+  });
+  
+  costRefSeguro.addEventListener('input', () => {
+    costState[currentCostMethod].ref_seguro = parseFloat(costRefSeguro.value) || 0;
+    recalculateCosts();
+  });
+  
+  costAutoCalc.addEventListener('change', () => {
+    const isChecked = costAutoCalc.checked;
+    costState[currentCostMethod].auto_calc = isChecked;
+    costDivisor.disabled = isChecked;
+    costRefExwork.disabled = isChecked;
+    recalculateCosts();
+  });
+  
+  // Reset Excel data
+  resetCostDataBtn.addEventListener('click', () => {
+    if (confirm("¿Estás seguro de restablecer los productos y costos a los valores originales de la planilla Excel?")) {
+      initCostState();
+      loadCostStateIntoInputs();
+      renderCostsTab();
+    }
+  });
+  
+  // Add customized local expense row
+  addExpenseBtn.addEventListener('click', () => {
+    costState[currentCostMethod].services.push({ name: "Gasto Local Nuevo", value: 0 });
+    renderLocalExpenses();
+    recalculateCosts();
+  });
+  
+  // Add new product row
+  addProductRowBtn.addEventListener('click', () => {
+    costState[currentCostMethod].products.push({
+      name: "Producto Nuevo",
+      units: 10,
+      unit_cost: 5.0
+    });
+    renderSpreadsheetBody();
+    recalculateCosts();
+  });
+  
+  // Export CSV download
+  exportCsvBtn.addEventListener('click', exportToCsv);
+}
+
+function renderLocalExpenses() {
+  localExpensesList.innerHTML = '';
+  const expenses = costState[currentCostMethod].services;
+  
+  expenses.forEach((exp, idx) => {
+    const row = document.createElement('div');
+    row.className = 'expense-item-row';
+    
+    const labelInput = document.createElement('input');
+    labelInput.type = 'text';
+    labelInput.className = 'expense-label-input';
+    labelInput.value = exp.name;
+    labelInput.addEventListener('input', () => {
+      exp.name = labelInput.value;
+    });
+    
+    const valInput = document.createElement('input');
+    valInput.type = 'number';
+    valInput.className = 'expense-value-input';
+    valInput.value = exp.value;
+    valInput.step = '0.01';
+    valInput.addEventListener('input', () => {
+      exp.value = parseFloat(valInput.value) || 0;
+      recalculateCosts();
+    });
+    
+    const delBtn = document.createElement('button');
+    delBtn.className = 'expense-delete-btn';
+    delBtn.innerHTML = '🗑️';
+    delBtn.title = 'Eliminar gasto';
+    delBtn.addEventListener('click', () => {
+      expenses.splice(idx, 1);
+      renderLocalExpenses();
+      recalculateCosts();
+    });
+    
+    row.appendChild(labelInput);
+    row.appendChild(valInput);
+    row.appendChild(delBtn);
+    localExpensesList.appendChild(row);
+  });
+}
+
+function renderSpreadsheetBody() {
+  spreadsheetTbody.innerHTML = '';
+  const products = costState[currentCostMethod].products;
+  
+  products.forEach((prod, idx) => {
+    const tr = document.createElement('tr');
+    tr.id = `row-prod-${idx}`;
+    
+    // Column 1: Name
+    const tdName = document.createElement('td');
+    tdName.style.position = 'sticky';
+    tdName.style.left = '0';
+    tdName.style.background = '#080d1a';
+    tdName.style.zIndex = '5';
+    tdName.style.borderRight = '1px solid var(--glass-border)';
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.className = 'grid-input-text';
+    nameInput.value = prod.name;
+    nameInput.addEventListener('input', () => {
+      prod.name = nameInput.value;
+    });
+    tdName.appendChild(nameInput);
+    tr.appendChild(tdName);
+    
+    // Column 2: Units
+    const tdUnits = document.createElement('td');
+    const unitsInput = document.createElement('input');
+    unitsInput.type = 'number';
+    unitsInput.className = 'grid-input-number';
+    unitsInput.value = prod.units;
+    unitsInput.step = '1';
+    unitsInput.addEventListener('input', () => {
+      prod.units = parseInt(unitsInput.value) || 0;
+      recalculateCosts();
+    });
+    tdUnits.appendChild(unitsInput);
+    tr.appendChild(tdUnits);
+    
+    // Column 3: Unit FOB (USD)
+    const tdUnitCost = document.createElement('td');
+    const costInput = document.createElement('input');
+    costInput.type = 'number';
+    costInput.className = 'grid-input-number';
+    costInput.value = prod.unit_cost;
+    costInput.step = '0.01';
+    costInput.addEventListener('input', () => {
+      prod.unit_cost = parseFloat(costInput.value) || 0;
+      recalculateCosts();
+    });
+    tdUnitCost.appendChild(costInput);
+    tr.appendChild(tdUnitCost);
+    
+    // Output Columns (Calculated, read-only)
+    // 4. FOB Total
+    const tdFobTotal = document.createElement('td');
+    tdFobTotal.id = `calc-fob-${idx}`;
+    tdFobTotal.textContent = '$0.00';
+    tr.appendChild(tdFobTotal);
+    
+    // 5. Flete Pror
+    const tdFreight = document.createElement('td');
+    tdFreight.id = `calc-freight-${idx}`;
+    tdFreight.textContent = '$0.00';
+    tr.appendChild(tdFreight);
+    
+    // 6. Seguro Pror
+    const tdSeguro = document.createElement('td');
+    tdSeguro.id = `calc-seguro-${idx}`;
+    tdSeguro.textContent = '$0.00';
+    tr.appendChild(tdSeguro);
+    
+    // 7. CIF Total
+    const tdCif = document.createElement('td');
+    tdCif.id = `calc-cif-${idx}`;
+    tdCif.textContent = '$0.00';
+    tr.appendChild(tdCif);
+    
+    // 8. IVA Importacion
+    const tdIva = document.createElement('td');
+    tdIva.id = `calc-iva-${idx}`;
+    tdIva.textContent = '$0.00';
+    tr.appendChild(tdIva);
+    
+    // 9. Gastos Locales
+    const tdLocal = document.createElement('td');
+    tdLocal.id = `calc-local-${idx}`;
+    tdLocal.textContent = '$0.00';
+    tr.appendChild(tdLocal);
+    
+    // 10. DAP Bruto USD
+    const tdDapBruto = document.createElement('td');
+    tdDapBruto.id = `calc-dap-bruto-${idx}`;
+    tdDapBruto.textContent = '$0.00';
+    tr.appendChild(tdDapBruto);
+    
+    // 11. DAP Bruto CLP
+    const tdDapBrutoClp = document.createElement('td');
+    tdDapBrutoClp.id = `calc-dap-bruto-clp-${idx}`;
+    tdDapBrutoClp.textContent = '$0';
+    tr.appendChild(tdDapBrutoClp);
+    
+    // 12. DAP Neto USD
+    const tdDapNet = document.createElement('td');
+    tdDapNet.id = `calc-dap-net-${idx}`;
+    tdDapNet.className = 'col-highlight';
+    tdDapNet.style.color = '#60a5fa';
+    tdDapNet.style.background = 'rgba(59,130,246,0.02)';
+    tdDapNet.textContent = '$0.00';
+    tr.appendChild(tdDapNet);
+    
+    // 13. DAP Neto CLP
+    const tdDapNetClp = document.createElement('td');
+    tdDapNetClp.id = `calc-dap-net-clp-${idx}`;
+    tdDapNetClp.className = 'col-highlight';
+    tdDapNetClp.style.color = '#10b981';
+    tdDapNetClp.style.background = 'rgba(16,185,129,0.02)';
+    tdDapNetClp.textContent = '$0';
+    tr.appendChild(tdDapNetClp);
+    
+    // 14. Unitario Neto CLP
+    const tdUnitNetClp = document.createElement('td');
+    tdUnitNetClp.id = `calc-unit-net-clp-${idx}`;
+    tdUnitNetClp.className = 'col-highlight';
+    tdUnitNetClp.style.color = '#fbbf24';
+    tdUnitNetClp.style.background = 'rgba(245,158,11,0.02)';
+    tdUnitNetClp.textContent = '$0';
+    tr.appendChild(tdUnitNetClp);
+    
+    // 15. Venta Costo+19% CLP
+    const tdVentaClp = document.createElement('td');
+    tdVentaClp.id = `calc-venta-clp-${idx}`;
+    tdVentaClp.className = 'col-highlight';
+    tdVentaClp.style.color = '#a78bfa';
+    tdVentaClp.style.background = 'rgba(167,139,250,0.02)';
+    tdVentaClp.textContent = '$0';
+    tr.appendChild(tdVentaClp);
+    
+    // Column 16: Action Delete
+    const tdDel = document.createElement('td');
+    tdDel.style.textAlign = 'center';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'col-btn-del';
+    delBtn.innerHTML = '🗑️';
+    delBtn.title = 'Eliminar fila';
+    delBtn.addEventListener('click', () => {
+      products.splice(idx, 1);
+      renderSpreadsheetBody();
+      recalculateCosts();
+    });
+    tdDel.appendChild(delBtn);
+    tr.appendChild(tdDel);
+    
+    spreadsheetTbody.appendChild(tr);
+  });
+}
+
+function recalculateCosts() {
+  const state = costState[currentCostMethod];
+  
+  let divisor = state.divisor;
+  let totalFob = 0;
+  
+  if (state.auto_calc) {
+    let sumUnits = 0;
+    state.products.forEach(p => {
+      sumUnits += p.units;
+      totalFob += p.units * p.unit_cost;
+    });
+    
+    divisor = sumUnits || 1;
+    state.divisor = divisor;
+    state.ref_exwork = totalFob;
+    
+    costDivisor.value = divisor;
+    costRefExwork.value = totalFob.toFixed(2);
+  } else {
+    divisor = state.divisor || 1;
+  }
+  
+  const totalServices = state.services.reduce((acc, s) => acc + s.value, 0);
+  
+  let sumUnits = 0;
+  let sumFob = 0;
+  let sumFreight = 0;
+  let sumSeguro = 0;
+  let sumCif = 0;
+  let sumIva = 0;
+  let sumLocal = 0;
+  let sumDapBruto = 0;
+  let sumDapBrutoClp = 0;
+  let sumDapNet = 0;
+  let sumDapNetClp = 0;
+  
+  state.products.forEach((p, idx) => {
+    const fobTotal = p.units * p.unit_cost;
+    const freightPror = (state.ref_freight / divisor) * p.units;
+    const seguroPror = (state.ref_seguro / divisor) * p.units;
+    const cifTotal = fobTotal + freightPror + seguroPror;
+    
+    const advalorem = 0;
+    const customsValue = cifTotal + advalorem;
+    const iva = customsValue * 0.19;
+    
+    const localPror = (totalServices / divisor) * p.units;
+    
+    const dapBruto = customsValue + iva + localPror;
+    const dapBrutoClp = dapBruto * state.usd_clp;
+    
+    const dapNet = customsValue + localPror;
+    const dapNetClp = dapNet * state.usd_clp;
+    
+    const unitNetClp = p.units > 0 ? Math.round(dapNetClp / p.units) : 0;
+    const unitIvaVenta = unitNetClp * 0.19;
+    const unitVentaClp = Math.round(unitNetClp + unitIvaVenta);
+    
+    // Update individual row cell texts
+    const elFob = document.getElementById(`calc-fob-${idx}`);
+    if (elFob) elFob.textContent = `$${fobTotal.toFixed(2)}`;
+    
+    const elFreight = document.getElementById(`calc-freight-${idx}`);
+    if (elFreight) elFreight.textContent = `$${freightPror.toFixed(2)}`;
+    
+    const elSeguro = document.getElementById(`calc-seguro-${idx}`);
+    if (elSeguro) elSeguro.textContent = `$${seguroPror.toFixed(2)}`;
+    
+    const elCif = document.getElementById(`calc-cif-${idx}`);
+    if (elCif) elCif.textContent = `$${cifTotal.toFixed(2)}`;
+    
+    const elIva = document.getElementById(`calc-iva-${idx}`);
+    if (elIva) elIva.textContent = `$${iva.toFixed(2)}`;
+    
+    const elLocal = document.getElementById(`calc-local-${idx}`);
+    if (elLocal) elLocal.textContent = `$${localPror.toFixed(2)}`;
+    
+    const elDapBruto = document.getElementById(`calc-dap-bruto-${idx}`);
+    if (elDapBruto) elDapBruto.textContent = `$${dapBruto.toFixed(2)}`;
+    
+    const elDapBrutoClp = document.getElementById(`calc-dap-bruto-clp-${idx}`);
+    if (elDapBrutoClp) elDapBrutoClp.textContent = `$${Math.round(dapBrutoClp).toLocaleString('es-CL')}`;
+    
+    const elDapNet = document.getElementById(`calc-dap-net-${idx}`);
+    if (elDapNet) elDapNet.textContent = `$${dapNet.toFixed(2)}`;
+    
+    const elDapNetClp = document.getElementById(`calc-dap-net-clp-${idx}`);
+    if (elDapNetClp) elDapNetClp.textContent = `$${Math.round(dapNetClp).toLocaleString('es-CL')}`;
+    
+    const elUnitNet = document.getElementById(`calc-unit-net-clp-${idx}`);
+    if (elUnitNet) elUnitNet.textContent = `$${unitNetClp.toLocaleString('es-CL')}`;
+    
+    const elVenta = document.getElementById(`calc-venta-clp-${idx}`);
+    if (elVenta) elVenta.textContent = `$${unitVentaClp.toLocaleString('es-CL')}`;
+    
+    // Accumulate
+    sumUnits += p.units;
+    sumFob += fobTotal;
+    sumFreight += freightPror;
+    sumSeguro += seguroPror;
+    sumCif += cifTotal;
+    sumIva += iva;
+    sumLocal += localPror;
+    sumDapBruto += dapBruto;
+    sumDapBrutoClp += dapBrutoClp;
+    sumDapNet += dapNet;
+    sumDapNetClp += dapNetClp;
+  });
+  
+  // Update totals row
+  totalRowUnits.textContent = sumUnits.toLocaleString('es-CL');
+  totalRowFob.textContent = `$${sumFob.toFixed(2)}`;
+  totalRowFreight.textContent = `$${sumFreight.toFixed(2)}`;
+  totalRowSeguro.textContent = `$${sumSeguro.toFixed(2)}`;
+  totalRowCif.textContent = `$${sumCif.toFixed(2)}`;
+  totalRowIva.textContent = `$${sumIva.toFixed(2)}`;
+  totalRowLocal.textContent = `$${sumLocal.toFixed(2)}`;
+  totalRowDapBruto.textContent = `$${sumDapBruto.toFixed(2)}`;
+  totalRowDapBrutoClp.textContent = `$${Math.round(sumDapBrutoClp).toLocaleString('es-CL')}`;
+  totalRowDapNet.textContent = `$${sumDapNet.toFixed(2)}`;
+  totalRowDapNetClp.textContent = `$${Math.round(sumDapNetClp).toLocaleString('es-CL')}`;
+  
+  const avgNetClp = sumUnits > 0 ? Math.round(sumDapNetClp / sumUnits) : 0;
+  totalRowAvgNetClp.textContent = `$${avgNetClp.toLocaleString('es-CL')}`;
+  
+  const totalIvaVenta = sumDapNetClp * 0.19;
+  const avgVentaClp = sumUnits > 0 ? Math.round((sumDapNetClp + totalIvaVenta) / sumUnits) : 0;
+  totalRowAvgVentaClp.textContent = `$${avgVentaClp.toLocaleString('es-CL')}`;
+  
+  // Update overall metrics banner
+  costStatTotalClp.textContent = `CLP $${Math.round(sumDapBrutoClp).toLocaleString('es-CL')}`;
+  costStatTotalUnits.textContent = `${sumUnits.toLocaleString('es-CL')} u`;
+  costStatTotalCif.textContent = `USD $${sumCif.toFixed(2)}`;
+}
+
+function exportToCsv() {
+  const state = costState[currentCostMethod];
+  let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include BOM for Spanish accents in Excel
+  
+  // CSV Headers
+  csvContent += "Producto,Unidades,Unit FOB (USD),FOB Total (USD),Flete Pror. (USD),Seguro Pror. (USD),CIF Total (USD),IVA Imp. (USD),Gasto Local (USD),DAP Bruto (USD),DAP Bruto (CLP),DAP Neto (USD),DAP Neto (CLP),Unitario Neto (CLP),Precio Venta Costo+19% (CLP)\n";
+  
+  const totalServices = state.services.reduce((acc, s) => acc + s.value, 0);
+  const divisor = state.divisor || 1;
+  
+  state.products.forEach(p => {
+    const fobTotal = p.units * p.unit_cost;
+    const freightPror = (state.ref_freight / divisor) * p.units;
+    const seguroPror = (state.ref_seguro / divisor) * p.units;
+    const cifTotal = fobTotal + freightPror + seguroPror;
+    const iva = cifTotal * 0.19;
+    const localPror = (totalServices / divisor) * p.units;
+    const dapBruto = cifTotal + iva + localPror;
+    const dapBrutoClp = dapBruto * state.usd_clp;
+    const dapNet = cifTotal + localPror;
+    const dapNetClp = dapNet * state.usd_clp;
+    const unitNetClp = p.units > 0 ? Math.round(dapNetClp / p.units) : 0;
+    const unitVentaClp = Math.round(unitNetClp * 1.19);
+    
+    const row = [
+      `"${p.name.replace(/"/g, '""')}"`,
+      p.units,
+      p.unit_cost.toFixed(2),
+      fobTotal.toFixed(2),
+      freightPror.toFixed(2),
+      seguroPror.toFixed(2),
+      cifTotal.toFixed(2),
+      iva.toFixed(2),
+      localPror.toFixed(2),
+      dapBruto.toFixed(2),
+      Math.round(dapBrutoClp),
+      dapNet.toFixed(2),
+      Math.round(dapNetClp),
+      unitNetClp,
+      unitVentaClp
+    ];
+    
+    csvContent += row.join(",") + "\n";
+  });
+  
+  // Download link trigger
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Planilla_Costos_${currentCostMethod}_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function renderCostsTab() {
+  renderLocalExpenses();
+  renderSpreadsheetBody();
+  recalculateCosts();
+}
+

@@ -19,283 +19,445 @@
         <span class="logo-icon">📈</span>
         <h1 class="logo-text">Importapp <span>2.0</span></h1>
       </div>
+      
+      <nav class="tab-navigation">
+        <button class="nav-tab active" id="tab-sourcing-btn">🔍 Sourcing & Búsqueda</button>
+        <button class="nav-tab" id="tab-costs-btn">📊 Planilla de Costos</button>
+      </nav>
+
       <span class="badge-chile">Mercado Chile</span>
     </header>
 
-    <!-- STATE 1: LANDING & SEARCH -->
-    <section id="landing-screen" class="landing-section">
-      <h2 class="hero-title">Encuentra tu próximo producto estrella en <span>Alibaba</span></h2>
-      <p class="hero-subtitle">
-        Analiza viabilidad comercial, calcula márgenes en CLP en tiempo real y evalúa riesgos de aduana (SEC, ISP, SAG) con lógica comercial chilena.
-      </p>
+    <!-- TAB 1: SOURCING CONTENT -->
+    <div id="sourcing-tab-content">
+      <!-- STATE 1: LANDING & SEARCH -->
+      <section id="landing-screen" class="landing-section">
+        <h2 class="hero-title">Encuentra tu próximo producto estrella en <span>Alibaba</span></h2>
+        <p class="hero-subtitle">
+          Analiza viabilidad comercial, calcula márgenes en CLP en tiempo real y evalúa riesgos de aduana (SEC, ISP, SAG) con lógica comercial chilena.
+        </p>
 
-      <div class="search-box-container">
-        <form id="search-form">
-          <div class="search-input-wrapper">
-            <input 
-              type="text" 
-              id="search-input" 
-              class="search-input" 
-              placeholder="Ingresa un producto o categoría (ej. massage gun, kitchen tools...)" 
-              required 
-              autocomplete="off"
-            >
-            <button type="submit" id="search-submit-btn" class="search-button" aria-label="Buscar">
-              🔍
-            </button>
+        <div class="search-box-container">
+          <form id="search-form">
+            <div class="search-input-wrapper">
+              <input 
+                type="text" 
+                id="search-input" 
+                class="search-input" 
+                placeholder="Ingresa un producto o categoría (ej. massage gun, kitchen tools...)" 
+                required 
+                autocomplete="off"
+              >
+              <button type="submit" id="search-submit-btn" class="search-button" aria-label="Buscar">
+                🔍
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="suggestions-wrapper">
+          <span class="suggestion-tag" data-query="massage gun">Pistolas de Masaje ⚡</span>
+          <span class="suggestion-tag" data-query="pet grooming accessories">Aseo de Mascotas 🐾</span>
+          <span class="suggestion-tag" data-query="kitchen tools">Utensilios de Cocina 🍳</span>
+          <span class="suggestion-tag" data-query="car accessories">Accesorios para Autos 🚗</span>
+          <span class="suggestion-tag" data-query="smart home gadgets">Hogar Inteligente 🏠</span>
+        </div>
+      </section>
+
+      <!-- STATE 2: LOADER timeline -->
+      <section id="loader-screen" class="loader-section">
+        <div class="radar-spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring-inner"></div>
+          <div class="spinner-glow"></div>
+        </div>
+        <h3 class="loader-title">Evaluando oportunidad comercial...</h3>
+        <div class="loading-steps-list glass-card">
+          <div class="step-item" id="step-sourcing">
+            <div class="step-icon">1</div>
+            <span>Buscando proveedores verificados en Alibaba con Trade Assurance...</span>
           </div>
-        </form>
+          <div class="step-item" id="step-market">
+            <div class="step-icon">2</div>
+            <span>Analizando saturación de mercado en Mercado Libre Chile...</span>
+          </div>
+          <div class="step-item" id="step-logistics">
+            <div class="step-icon">3</div>
+            <span>Calculando volumen métrico y costos de flete marítimo/aéreo...</span>
+          </div>
+          <div class="step-item" id="step-regulations">
+            <div class="step-icon">4</div>
+            <span>Verificando regulaciones de internación chilenas (SEC, ISP, SAG, Subtel)...</span>
+          </div>
+          <div class="step-item" id="step-margin">
+            <div class="step-icon">5</div>
+            <span>Calculando costos de internación, aranceles (Ad-Valorem + IVA) y márgenes...</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATE 3: RESULTS DASHBOARD -->
+      <main id="dashboard-screen" class="dashboard-section">
+        <!-- Title & Action -->
+        <div class="dashboard-header">
+          <div class="search-title-panel">
+            <h2 id="result-query-title">Resultados de Análisis</h2>
+            <p>Reporte de viabilidad comercial para importación y reventa en Chile</p>
+          </div>
+          <button id="back-search-btn" class="btn-secondary">
+            <span>←</span> Nueva Búsqueda
+          </button>
+        </div>
+
+        <!-- General Market Stats -->
+        <section class="metrics-row">
+          <div class="metric-card glass-card positive">
+            <div class="metric-icon-box">💰</div>
+            <div class="metric-info">
+              <h4>Margen Promedio</h4>
+              <div id="stat-avg-margin" class="metric-val">65%</div>
+            </div>
+          </div>
+          <div class="metric-card glass-card">
+            <div class="metric-icon-box">📈</div>
+            <div class="metric-info">
+              <h4>Competencia Chile</h4>
+              <div id="stat-competition" class="metric-val">Baja</div>
+            </div>
+          </div>
+          <div class="metric-card glass-card">
+            <div class="metric-icon-box">🚚</div>
+            <div class="metric-info">
+              <h4>Dificultad Aduanera</h4>
+              <div id="stat-difficulty" class="metric-val">Fácil</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Ranked Products Grid -->
+        <h3 class="section-title">Oportunidades de Productos Identificadas</h3>
+        <section id="products-container" class="products-grid">
+          <!-- Rendered dynamically via JavaScript -->
+        </section>
+
+        <!-- Dynamic Section: Simulator & Regulations -->
+        <div class="dual-section">
+          <!-- Calculator Card -->
+          <section class="glass-card simulator-card">
+            <h3 class="section-title">🧮 Simulador Dinámico de Costos (CLP)</h3>
+            
+            <div class="sim-layout">
+              <div class="sim-inputs">
+                <div class="input-group">
+                  <label for="sim-product-select" class="sim-label">Producto a Simular</label>
+                  <select id="sim-product-select" class="sim-select">
+                    <!-- Options rendered dynamically -->
+                  </select>
+                </div>
+
+                <div class="input-group">
+                  <div class="input-label-row">
+                    <span>Costo Unitario FOB (USD)</span>
+                    <span id="label-unit-cost">$0.00</span>
+                  </div>
+                  <input type="range" id="sim-unit-cost" class="sim-slider" min="0.5" max="50" step="0.1" value="5.0">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-label-row">
+                    <span>Cantidad a Importar (Unidades)</span>
+                    <span id="label-qty">0</span>
+                  </div>
+                  <input type="range" id="sim-qty" class="sim-slider" min="10" max="2000" step="10" value="100">
+                </div>
+
+                <div class="input-group">
+                  <label for="sim-shipping-type" class="sim-label">Método de Envío</label>
+                  <select id="sim-shipping-type" class="sim-select">
+                    <option value="air">Aéreo Express (Cajas rápidas)</option>
+                    <option value="sea">Marítimo Consolidado (LCL - Volumen)</option>
+                  </select>
+                </div>
+
+                <div class="input-group">
+                  <div class="input-label-row">
+                    <span>Precio de Resale en Chile (CLP)</span>
+                    <span id="label-resale-price">$0</span>
+                  </div>
+                  <input type="text" id="sim-resale-price" class="sim-input" value="0">
+                </div>
+              </div>
+
+              <!-- Simulation Outputs -->
+              <div class="sim-results">
+                <div class="sim-results-title">Desglose de Costos de Internación (IVA + Arancel)</div>
+                
+                <div class="result-row">
+                  <span>Valor FOB Total (USD)</span>
+                  <span id="res-total-fob" class="val">$0.00</span>
+                </div>
+                <div class="result-row">
+                  <span>Flete Internacional (USD)</span>
+                  <span id="res-freight" class="val">$0.00</span>
+                </div>
+                <div class="result-row">
+                  <span>Arancel Aduanero (Ad-Valorem 6%)</span>
+                  <span id="res-advalorem" class="val">$0.00</span>
+                </div>
+                <div class="result-row">
+                  <span>IVA Importación (19%)</span>
+                  <span id="res-iva" class="val">$0.00</span>
+                </div>
+                <div class="result-row">
+                  <span>Costo de Internación por Unidad (CLP)</span>
+                  <span id="res-unit-landed" class="val">$0</span>
+                </div>
+                <div class="result-row">
+                  <span>Inversión Total Requerida (CLP)</span>
+                  <span id="res-total-investment" class="val">$0</span>
+                </div>
+                <div class="result-row highlight">
+                  <span>Margen de Ganancia Neto</span>
+                  <span id="res-net-margin" class="val">0%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Regulatory Rules Card -->
+          <section class="glass-card regulatory-card">
+            <h3 class="section-title">🛡️ Matriz de Filtros de Riesgo Aduanero Chile</h3>
+            
+            <div class="reg-grid">
+              <div class="reg-item sec">
+                <div class="reg-icon-badge">SEC</div>
+                <div class="reg-details">
+                  <h5>Certificación Eléctrica (SEC)</h5>
+                  <p>Obligatorio para cargadores de pared y dispositivos de 220V. Consejo: **Importa modelos recargables USB-C** sin el adaptador de pared para saltarte este trámite.</p>
+                </div>
+              </div>
+
+              <div class="reg-item isp">
+                <div class="reg-icon-badge">ISP</div>
+                <div class="reg-details">
+                  <h5>Registro Sanitario (ISP)</h5>
+                  <p>Aplica a cosméticos, líquidos cutáneos, dispositivos médicos directos y suplementos alimenticios. Alto riesgo de decomiso en aduana si no se cuenta con resolución sanitaria.</p>
+                </div>
+              </div>
+
+              <div class="reg-item sag">
+                <div class="reg-icon-badge">SAG</div>
+                <div class="reg-details">
+                  <h5>Control Silvoagropecuario (SAG)</h5>
+                  <p>Inspecciona madera cruda, productos de bamboo, semillas, cuero vegetal y alimentos de mascotas. Exige certificado fitosanitario del origen.</p>
+                </div>
+              </div>
+
+              <div class="reg-item subtel">
+                <div class="reg-icon-badge">RF</div>
+                <div class="reg-details">
+                  <h5>Homologación de Radiofrecuencia (Subtel)</h5>
+                  <p>Aplica a routers, drones y transmisores FM de largo alcance. Las aduanas chilenas pueden exigir certificado de internación Subtel para lotes comerciales medianos/grandes.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Sourcing Executive Summary -->
+        <section class="glass-card summary-card">
+          <h3 class="section-title">📋 Resumen Ejecutivo y Hoja de Ruta</h3>
+          
+          <div class="summary-grid">
+            <div class="summary-col">
+              <span class="summary-badge best">La Mejor Oportunidad</span>
+              <h3 id="summary-best-name">Nombre del Producto</h3>
+              <p id="summary-best-desc">Explicación detallada de por qué este producto es el ideal comercialmente.</p>
+            </div>
+
+            <div class="summary-col">
+              <span class="summary-badge safe">El Más Seguro (Principiantes)</span>
+              <h3 id="summary-safe-name">Nombre del Producto Seguro</h3>
+              <p id="summary-safe-desc">Explicación detallada del por qué representa el menor riesgo logístico y regulador.</p>
+            </div>
+          </div>
+
+          <!-- Roadmap -->
+          <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-family: var(--font-title);">Plan de Acción para Importar con Éxito</h4>
+          <div class="roadmap-list">
+            <div class="roadmap-item">
+              <span class="roadmap-num">1.</span>
+              <span>**Compra de Muestras:** Solicita 2-3 muestras al proveedor verificado para revisar torque, batería y terminaciones físicas antes del lote final.</span>
+            </div>
+            <div class="roadmap-item">
+              <span class="roadmap-num">2.</span>
+              <span>**Negociar Customización (OEM):** Pide al fabricante estampar tu logo (lasers en chasis) y personalizar la caja a partir de 100-200 unidades para construir marca país.</span>
+            </div>
+            <div class="roadmap-item">
+              <span class="roadmap-num">3.</span>
+              <span>**Configurar Envío Consolidado:** Si el flete aéreo express supera los USD $15/unidad, utiliza un consolidador de carga marítima (LCL) en Santiago para internar el pallet por mar.</span>
+            </div>
+            <div class="roadmap-item">
+              <span class="roadmap-num">4.</span>
+              <span>**Marketing y Publicidad:** Crea un video demostrativo de alta calidad resolviendo el problema e impúlsalo en TikTok Ads antes del arribo del stock a Chile.</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- TAB 2: ADVANCED COSTS SPREADSHEET -->
+    <div id="costs-tab-content" style="display: none;">
+      <div class="costs-header">
+        <h2>Planilla de Costos Avanzada (Multi-producto)</h2>
+        <p>Calcula y prorratea embarques consolidados aéreos y marítimos con la lógica real del curso de importación.</p>
       </div>
 
-      <div class="suggestions-wrapper">
-        <span class="suggestion-tag" data-query="massage gun">Pistolas de Masaje ⚡</span>
-        <span class="suggestion-tag" data-query="pet grooming accessories">Aseo de Mascotas 🐾</span>
-        <span class="suggestion-tag" data-query="kitchen tools">Utensilios de Cocina 🍳</span>
-        <span class="suggestion-tag" data-query="car accessories">Accesorios para Autos 🚗</span>
-        <span class="suggestion-tag" data-query="smart home gadgets">Hogar Inteligente 🏠</span>
-      </div>
-    </section>
-
-    <!-- STATE 2: LOADER timeline -->
-    <section id="loader-screen" class="loader-section">
-      <div class="radar-spinner">
-        <div class="spinner-ring"></div>
-        <div class="spinner-ring-inner"></div>
-        <div class="spinner-glow"></div>
-      </div>
-      <h3 class="loader-title">Evaluando oportunidad comercial...</h3>
-      <div class="loading-steps-list glass-card">
-        <div class="step-item" id="step-sourcing">
-          <div class="step-icon">1</div>
-          <span>Buscando proveedores verificados en Alibaba con Trade Assurance...</span>
-        </div>
-        <div class="step-item" id="step-market">
-          <div class="step-icon">2</div>
-          <span>Analizando saturación de mercado en Mercado Libre Chile...</span>
-        </div>
-        <div class="step-item" id="step-logistics">
-          <div class="step-icon">3</div>
-          <span>Calculando volumen métrico y costos de flete marítimo/aéreo...</span>
-        </div>
-        <div class="step-item" id="step-regulations">
-          <div class="step-icon">4</div>
-          <span>Verificando regulaciones de internación chilenas (SEC, ISP, SAG, Subtel)...</span>
-        </div>
-        <div class="step-item" id="step-margin">
-          <div class="step-icon">5</div>
-          <span>Calculando costos de internación, aranceles (Ad-Valorem + IVA) y márgenes...</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- STATE 3: RESULTS DASHBOARD -->
-    <main id="dashboard-screen" class="dashboard-section">
-      <!-- Title & Action -->
-      <div class="dashboard-header">
-        <div class="search-title-panel">
-          <h2 id="result-query-title">Resultados de Análisis</h2>
-          <p>Reporte de viabilidad comercial para importación y reventa en Chile</p>
-        </div>
-        <button id="back-search-btn" class="btn-secondary">
-          <span>←</span> Nueva Búsqueda
-        </button>
+      <!-- Shipping Type Switcher -->
+      <div class="shipping-switcher-bar">
+        <button class="shipping-btn active" id="ship-btn-aereo" data-type="aereo">✈️ Envío Aéreo Express (Dap Aereo)</button>
+        <button class="shipping-btn" id="ship-btn-maritimo" data-type="maritimo">🚢 Envío Marítimo Consolidado (Dap Maritimo)</button>
       </div>
 
-      <!-- General Market Stats -->
-      <section class="metrics-row">
+      <!-- Configuration Panel -->
+      <div class="costs-config-grid">
+        <!-- Global parameters -->
+        <div class="glass-card config-card">
+          <h3>⚙️ Parámetros Generales del Embarque</h3>
+          <div class="config-inputs">
+            <div class="config-input-group">
+              <label for="cost-exchange-rate">Tipo de Cambio (CLP/USD)</label>
+              <input type="number" id="cost-exchange-rate" class="sim-input" value="704" step="1">
+            </div>
+            <div class="config-input-group">
+              <label for="cost-divisor" id="label-cost-divisor">Divisor de Prorrateo B3</label>
+              <input type="number" id="cost-divisor" class="sim-input" value="18" step="1">
+            </div>
+            <div class="config-input-group">
+              <label for="cost-ref-exwork" id="label-cost-ref-exwork">FOB / Ex Work Referencia B6 (USD)</label>
+              <input type="number" id="cost-ref-exwork" class="sim-input" value="350" step="0.01">
+            </div>
+            <div class="config-input-group">
+              <label for="cost-ref-freight">Flete Internacional B9 (USD)</label>
+              <input type="number" id="cost-ref-freight" class="sim-input" value="780" step="0.01">
+            </div>
+            <div class="config-input-group">
+              <label for="cost-ref-seguro">Seguro Internacional B15 (USD)</label>
+              <input type="number" id="cost-ref-seguro" class="sim-input" value="0" step="0.01">
+            </div>
+            <div class="config-input-group checkbox-group" style="flex-direction: row; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+              <input type="checkbox" id="cost-auto-calc" class="sim-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+              <label for="cost-auto-calc" style="font-size: 0.85rem; color: var(--text-secondary); cursor: pointer;">Auto-calcular Divisor B3 y FOB B6</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Local expenses list -->
+        <div class="glass-card config-card">
+          <h3>🇨🇱 Gastos Locales de Internación (USD)</h3>
+          <p class="config-hint" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Se prorratean dividiendo el total por el Divisor B3 y multiplicándolo por las unidades del producto.
+          </p>
+          <div id="local-expenses-list" class="expenses-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <!-- Rendered dynamically -->
+          </div>
+          <button id="add-expense-btn" class="btn-secondary" style="margin-top: 1.25rem; width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.6rem 1rem;">
+            ➕ Añadir Gasto Personalizado
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Totals Stats -->
+      <div class="metrics-row" style="margin-top: 2rem; margin-bottom: 2rem;">
         <div class="metric-card glass-card positive">
           <div class="metric-icon-box">💰</div>
           <div class="metric-info">
-            <h4>Margen Promedio</h4>
-            <div id="stat-avg-margin" class="metric-val">65%</div>
+            <h4>Inversión Bruta Total</h4>
+            <div id="cost-stat-total-clp" class="metric-val" style="color: var(--success);">CLP $0</div>
           </div>
         </div>
         <div class="metric-card glass-card">
-          <div class="metric-icon-box">📈</div>
+          <div class="metric-icon-box">📦</div>
           <div class="metric-info">
-            <h4>Competencia Chile</h4>
-            <div id="stat-competition" class="metric-val">Baja</div>
+            <h4>Unidades Totales</h4>
+            <div id="cost-stat-total-units" class="metric-val">0 u</div>
           </div>
         </div>
         <div class="metric-card glass-card">
-          <div class="metric-icon-box">🚚</div>
+          <div class="metric-icon-box">💵</div>
           <div class="metric-info">
-            <h4>Dificultad Aduanera</h4>
-            <div id="stat-difficulty" class="metric-val">Fácil</div>
+            <h4>Valor CIF de Carga</h4>
+            <div id="cost-stat-total-cif" class="metric-val">USD $0.00</div>
           </div>
         </div>
-      </section>
-
-      <!-- Ranked Products Grid -->
-      <h3 class="section-title">Oportunidades de Productos Identificadas</h3>
-      <section id="products-container" class="products-grid">
-        <!-- Rendered dynamically via JavaScript -->
-      </section>
-
-      <!-- Dynamic Section: Simulator & Regulations -->
-      <div class="dual-section">
-        <!-- Calculator Card -->
-        <section class="glass-card simulator-card">
-          <h3 class="section-title">🧮 Simulador Dinámico de Costos (CLP)</h3>
-          
-          <div class="sim-layout">
-            <div class="sim-inputs">
-              <div class="input-group">
-                <label for="sim-product-select" class="sim-label">Producto a Simular</label>
-                <select id="sim-product-select" class="sim-select">
-                  <!-- Options rendered dynamically -->
-                </select>
-              </div>
-
-              <div class="input-group">
-                <div class="input-label-row">
-                  <span>Costo Unitario FOB (USD)</span>
-                  <span id="label-unit-cost">$0.00</span>
-                </div>
-                <input type="range" id="sim-unit-cost" class="sim-slider" min="0.5" max="50" step="0.1" value="5.0">
-              </div>
-
-              <div class="input-group">
-                <div class="input-label-row">
-                  <span>Cantidad a Importar (Unidades)</span>
-                  <span id="label-qty">0</span>
-                </div>
-                <input type="range" id="sim-qty" class="sim-slider" min="10" max="2000" step="10" value="100">
-              </div>
-
-              <div class="input-group">
-                <label for="sim-shipping-type" class="sim-label">Método de Envío</label>
-                <select id="sim-shipping-type" class="sim-select">
-                  <option value="air">Aéreo Express (Cajas rápidas)</option>
-                  <option value="sea">Marítimo Consolidado (LCL - Volumen)</option>
-                </select>
-              </div>
-
-              <div class="input-group">
-                <div class="input-label-row">
-                  <span>Precio de Resale en Chile (CLP)</span>
-                  <span id="label-resale-price">$0</span>
-                </div>
-                <input type="text" id="sim-resale-price" class="sim-input" value="0">
-              </div>
-            </div>
-
-            <!-- Simulation Outputs -->
-            <div class="sim-results">
-              <div class="sim-results-title">Desglose de Costos de Internación (IVA + Arancel)</div>
-              
-              <div class="result-row">
-                <span>Valor FOB Total (USD)</span>
-                <span id="res-total-fob" class="val">$0.00</span>
-              </div>
-              <div class="result-row">
-                <span>Flete Internacional (USD)</span>
-                <span id="res-freight" class="val">$0.00</span>
-              </div>
-              <div class="result-row">
-                <span>Arancel Aduanero (Ad-Valorem 6%)</span>
-                <span id="res-advalorem" class="val">$0.00</span>
-              </div>
-              <div class="result-row">
-                <span>IVA Importación (19%)</span>
-                <span id="res-iva" class="val">$0.00</span>
-              </div>
-              <div class="result-row">
-                <span>Costo de Internación por Unidad (CLP)</span>
-                <span id="res-unit-landed" class="val">$0</span>
-              </div>
-              <div class="result-row">
-                <span>Inversión Total Requerida (CLP)</span>
-                <span id="res-total-investment" class="val">$0</span>
-              </div>
-              <div class="result-row highlight">
-                <span>Margen de Ganancia Neto</span>
-                <span id="res-net-margin" class="val">0%</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Regulatory Rules Card -->
-        <section class="glass-card regulatory-card">
-          <h3 class="section-title">🛡️ Matriz de Filtros de Riesgo Aduanero Chile</h3>
-          
-          <div class="reg-grid">
-            <div class="reg-item sec">
-              <div class="reg-icon-badge">SEC</div>
-              <div class="reg-details">
-                <h5>Certificación Eléctrica (SEC)</h5>
-                <p>Obligatorio para cargadores de pared y dispositivos de 220V. Consejo: **Importa modelos recargables USB-C** sin el adaptador de pared para saltarte este trámite.</p>
-              </div>
-            </div>
-
-            <div class="reg-item isp">
-              <div class="reg-icon-badge">ISP</div>
-              <div class="reg-details">
-                <h5>Registro Sanitario (ISP)</h5>
-                <p>Aplica a cosméticos, líquidos cutáneos, dispositivos médicos directos y suplementos alimenticios. Alto riesgo de decomiso en aduana si no se cuenta con resolución sanitaria.</p>
-              </div>
-            </div>
-
-            <div class="reg-item sag">
-              <div class="reg-icon-badge">SAG</div>
-              <div class="reg-details">
-                <h5>Control Silvoagropecuario (SAG)</h5>
-                <p>Inspecciona madera cruda, productos de bamboo, semillas, cuero vegetal y alimentos de mascotas. Exige certificado fitosanitario del origen.</p>
-              </div>
-            </div>
-
-            <div class="reg-item subtel">
-              <div class="reg-icon-badge">RF</div>
-              <div class="reg-details">
-                <h5>Homologación de Radiofrecuencia (Subtel)</h5>
-                <p>Aplica a routers, drones y transmisores FM de largo alcance. Las aduanas chilenas pueden exigir certificado de internación Subtel para lotes comerciales medianos/grandes.</p>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
 
-      <!-- Sourcing Executive Summary -->
-      <section class="glass-card summary-card">
-        <h3 class="section-title">📋 Resumen Ejecutivo y Hoja de Ruta</h3>
+      <!-- Main Spreadsheet Grid -->
+      <div class="glass-card spreadsheet-card" style="padding: 1.5rem; margin-bottom: 4rem;">
+        <div class="spreadsheet-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <h3 class="section-title" style="margin-bottom: 0;">📋 Planilla de Desglose de Prorrateo</h3>
+          <div class="spreadsheet-actions" style="display: flex; gap: 0.75rem;">
+            <button id="add-product-row-btn" class="btn-primary" style="background: var(--primary-gradient); border: none; color: #fff; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: var(--transition-smooth); box-shadow: 0 4px 12px var(--primary-glow);" onmouseover="this.style.transform='translateY(-1px)';" onmouseout="this.style.transform='none';">
+              ➕ Añadir Fila
+            </button>
+            <button id="reset-cost-data-btn" class="btn-secondary" style="padding: 0.5rem 1rem; border-radius: 8px;">
+              🔄 Restablecer Original
+            </button>
+            <button id="export-csv-btn" class="btn-secondary" style="padding: 0.5rem 1rem; border-radius: 8px;">
+              📥 Descargar CSV
+            </button>
+          </div>
+        </div>
         
-        <div class="summary-grid">
-          <div class="summary-col">
-            <span class="summary-badge best">La Mejor Oportunidad</span>
-            <h3 id="summary-best-name">Nombre del Producto</h3>
-            <p id="summary-best-desc">Explicación detallada de por qué este producto es el ideal comercialmente.</p>
-          </div>
-
-          <div class="summary-col">
-            <span class="summary-badge safe">El Más Seguro (Principiantes)</span>
-            <h3 id="summary-safe-name">Nombre del Producto Seguro</h3>
-            <p id="summary-safe-desc">Explicación detallada del por qué representa el menor riesgo logístico y regulador.</p>
-          </div>
+        <div class="spreadsheet-table-wrapper" style="overflow-x: auto; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(10, 16, 32, 0.4);">
+          <table class="spreadsheet-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.02);">
+                <th style="min-width: 220px; position: sticky; left: 0; background: #080d1a; z-index: 5; padding: 1rem; border-right: 1px solid var(--glass-border);">Nombre Producto</th>
+                <th style="padding: 1rem; min-width: 80px;">Unidades</th>
+                <th style="padding: 1rem; min-width: 120px;">Unit. FOB (USD)</th>
+                <th style="padding: 1rem; min-width: 120px;">FOB Total (USD)</th>
+                <th style="padding: 1rem; min-width: 120px;">Flete Pror. (USD)</th>
+                <th style="padding: 1rem; min-width: 120px;">Seguro Pror. (USD)</th>
+                <th style="padding: 1rem; min-width: 120px;">CIF Total (USD)</th>
+                <th style="padding: 1rem; min-width: 110px;">IVA Imp. (19%)</th>
+                <th style="padding: 1rem; min-width: 120px;">G. Local (USD)</th>
+                <th style="padding: 1rem; min-width: 130px;">DAP Bruto (USD)</th>
+                <th style="padding: 1rem; min-width: 130px;">DAP Bruto (CLP)</th>
+                <th style="padding: 1rem; min-width: 130px; font-weight: 700; color: #60a5fa; background: rgba(59,130,246,0.03);">DAP Neto (USD)</th>
+                <th style="padding: 1rem; min-width: 130px; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.03);">DAP Neto (CLP)</th>
+                <th style="padding: 1rem; min-width: 130px; font-weight: 700; color: #fbbf24; background: rgba(245,158,11,0.03);">Unitario Neto (CLP)</th>
+                <th style="padding: 1rem; min-width: 130px; font-weight: 700; color: #a78bfa; background: rgba(167,139,250,0.03);">Venta Costo+19% (CLP)</th>
+                <th style="padding: 1rem; text-align: center; min-width: 80px;">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="spreadsheet-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+            <tfoot>
+              <tr class="totals-row" style="border-top: 2px solid var(--glass-border); background: rgba(255,255,255,0.03); font-weight: 700;">
+                <td style="position: sticky; left: 0; background: #080d1a; padding: 1rem; border-right: 1px solid var(--glass-border); border-top: 2px solid var(--glass-border);">TOTALES</td>
+                <td id="total-row-units" style="padding: 1rem;">0</td>
+                <td style="padding: 1rem; color: var(--text-muted);">-</td>
+                <td id="total-row-fob" style="padding: 1rem;">$0.00</td>
+                <td id="total-row-freight" style="padding: 1rem;">$0.00</td>
+                <td id="total-row-seguro" style="padding: 1rem;">$0.00</td>
+                <td id="total-row-cif" style="padding: 1rem;">$0.00</td>
+                <td id="total-row-iva" style="padding: 1rem;">$0.00</td>
+                <td id="total-row-local" style="padding: 1rem;">$0.00</td>
+                <td id="total-row-dap-bruto" style="padding: 1rem;">$0.00</td>
+                <td id="total-row-dap-bruto-clp" style="padding: 1rem;">$0</td>
+                <td id="total-row-dap-net" style="padding: 1rem; background: rgba(59,130,246,0.03); color: #60a5fa;">$0.00</td>
+                <td id="total-row-dap-net-clp" style="padding: 1rem; background: rgba(16,185,129,0.03); color: #10b981;">$0</td>
+                <td id="total-row-avg-net-clp" style="padding: 1rem; background: rgba(245,158,11,0.03); color: #fbbf24;">$0</td>
+                <td id="total-row-avg-venta-clp" style="padding: 1rem; background: rgba(167,139,250,0.03); color: #a78bfa;">$0</td>
+                <td style="padding: 1rem; text-align: center; color: var(--text-muted);">-</td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
-
-        <!-- Roadmap -->
-        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-family: var(--font-title);">Plan de Acción para Importar con Éxito</h4>
-        <div class="roadmap-list">
-          <div class="roadmap-item">
-            <span class="roadmap-num">1.</span>
-            <span>**Compra de Muestras:** Solicita 2-3 muestras al proveedor verificado para revisar torque, batería y terminaciones físicas antes del lote final.</span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-num">2.</span>
-            <span>**Negociar Customización (OEM):** Pide al fabricante estampar tu logo (lasers en chasis) y personalizar la caja a partir de 100-200 unidades para construir marca país.</span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-num">3.</span>
-            <span>**Configurar Envío Consolidado:** Si el flete aéreo express supera los USD $15/unidad, utiliza un consolidador de carga marítima (LCL) en Santiago para internar el pallet por mar.</span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-num">4.</span>
-            <span>**Marketing y Publicidad:** Crea un video demostrativo de alta calidad resolviendo el problema e impúlsalo en TikTok Ads antes del arribo del stock a Chile.</span>
-          </div>
-        </div>
-      </section>
-    </main>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer>

@@ -1016,3 +1016,294 @@ footer {
   padding: 2rem 0;
   margin-top: 4rem;
 }
+
+/* ==========================================================================
+   ADVANCED COST PLANILLA TABS & GRID STYLES
+   ========================================================================== */
+
+/* Tab Navigation Header */
+.tab-navigation {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(10, 16, 32, 0.6);
+  border: 1px solid var(--glass-border);
+  padding: 0.35rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.nav-tab {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.nav-tab:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-tab.active {
+  color: var(--text-primary);
+  background: var(--primary-gradient);
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+/* Costs Content Screen */
+.costs-header {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.costs-header h2 {
+  font-family: var(--font-title);
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.costs-header p {
+  color: var(--text-secondary);
+}
+
+/* Shipping Switcher */
+.shipping-switcher-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.shipping-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shipping-btn:hover {
+  border-color: var(--glass-border-hover);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.shipping-btn.active {
+  border-color: var(--primary);
+  color: var(--text-primary);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(29, 78, 216, 0.05) 100%);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+}
+
+/* Config Grid Layout */
+.costs-config-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .costs-config-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.config-card {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.config-card h3 {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.config-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.config-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.config-input-group label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Local Expenses List */
+.expense-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.expense-label-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.15rem 0.25rem;
+  outline: none;
+  flex-grow: 1;
+}
+
+.expense-label-input:focus {
+  border-bottom-color: var(--primary);
+}
+
+.expense-value-input {
+  width: 90px;
+  background: #090e1c;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  text-align: right;
+  outline: none;
+}
+
+.expense-value-input:focus {
+  border-color: var(--primary);
+}
+
+.expense-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  font-size: 1.1rem;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expense-delete-btn:hover {
+  color: var(--danger);
+  transform: scale(1.1);
+}
+
+/* Spreadsheet Grid Style */
+.spreadsheet-table {
+  border-collapse: collapse;
+}
+
+.spreadsheet-table th, .spreadsheet-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--glass-border);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.spreadsheet-table th {
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.spreadsheet-table tbody tr {
+  transition: var(--transition-smooth);
+}
+
+.spreadsheet-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.spreadsheet-table td.col-highlight {
+  font-weight: 600;
+}
+
+/* Inline Editable Inputs */
+.grid-input-text {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.25rem;
+  width: 100%;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.grid-input-text:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+.grid-input-text:focus {
+  border-bottom-color: var(--primary);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.grid-input-number {
+  background: #090e1c;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  width: 80px;
+  text-align: right;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.grid-input-number:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.25);
+}
+
+.col-btn-del {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.col-btn-del:hover {
+  color: var(--danger);
+  transform: scale(1.15);
+}
+
