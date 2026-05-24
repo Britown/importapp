@@ -34,7 +34,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "elec_premium",
       name: `${title} Pro Inteligente (Edición Premium)`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hbf3cb4a79b04fcb0a349efc44081c798P.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' pro')}`,
       supplier_verified: true,
       supplier_years: 7,
@@ -54,7 +54,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "elec_usb",
       name: `${title} Compacto USB-C (Batería Integrada)`,
-      thumbnail: "https://sc04.alicdn.com/kf/H468c48a73b5e43eb9ebce9c2b4d1c479V.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' mini usb')}`,
       supplier_verified: true,
       supplier_years: 5,
@@ -74,7 +74,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "elec_basic",
       name: `${title} Standard de Red Eléctrica (220V AC)`,
-      thumbnail: "https://sc04.alicdn.com/kf/H983ebc2089b04f76b91bfb41cd2221b64.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' 220v')}`,
       supplier_verified: true,
       supplier_years: 4,
@@ -102,7 +102,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "cosm_premium",
       name: `${title} Suave Hidratante (Fórmula Vegana)`,
-      thumbnail: "https://sc04.alicdn.com/kf/HTB16VnIa5LxK1Rjy0Ffq6zYxpXaP.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1608248597481-496100c80836?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' organic vegan')}`,
       supplier_verified: true,
       supplier_years: 6,
@@ -122,7 +122,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "cosm_set",
       name: `Kit de Aplicadores y Accesorios para ${title}`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hbf1d4c72ba044cbfa349efc44031d279S.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' tools accessories')}`,
       supplier_verified: true,
       supplier_years: 5,
@@ -142,7 +142,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "cosm_basic",
       name: `${title} Corporal Nutritivo (Sourcing Estándar)`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hddcfc4c78a0c4ebcb345efc1c98e2879Y.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' mass market')}`,
       supplier_verified: true,
       supplier_years: 4,
@@ -170,7 +170,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "food_silicone",
       name: `${title} de Silicona Premium (BPA-Free / Plegable)`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hbf1d4c72ba044cbfa349efc44031d279S.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' silicone bpa free')}`,
       supplier_verified: true,
       supplier_years: 8,
@@ -190,7 +190,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "food_electric",
       name: `${title} Eléctrico Recargable USB (Express)`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hddcfc4c78a0c4ebcb345efc1c98e2879Y.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1578643463396-0997cb5328c1?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' electric usb')}`,
       supplier_verified: true,
       supplier_years: 5,
@@ -210,7 +210,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "food_steel",
       name: `${title} Metálico Tradicional (Acero Inoxidable)`,
-      thumbnail: "https://sc04.alicdn.com/kf/HTB16VnIa5LxK1Rjy0Ffq6zYxpXaP.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' stainless steel')}`,
       supplier_verified: true,
       supplier_years: 9,
@@ -238,7 +238,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "agri_processed",
       name: `${title} Premium de Fibra Sintética Reforzada`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hbf1d4c72ba044cbfa349efc44031d279S.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1541599540903-216a46ca1ad0?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' premium oxford plastic')}`,
       supplier_verified: true,
       supplier_years: 6,
@@ -258,7 +258,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "agri_wood",
       name: `${title} Rústico de Madera de Bamboo Natural`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hddcfc4c78a0c4ebcb345efc1c98e2879Y.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1595079676339-1534801ad6cf?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' bamboo wooden')}`,
       supplier_verified: true,
       supplier_years: 7,
@@ -278,7 +278,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "agri_basic",
       name: `${title} Standard Económico (Importación Masiva)`,
-      thumbnail: "https://sc04.alicdn.com/kf/HTB16VnIa5LxK1Rjy0Ffq6zYxpXaP.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' basic')}`,
       supplier_verified: true,
       supplier_years: 3,
@@ -307,7 +307,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "gen_premium",
       name: `${title} Modular Organizador (Edición Reforzada)`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hbf1d4c72ba044cbfa349efc44031d279S.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' organizer organizer premium')}`,
       supplier_verified: true,
       supplier_years: 6,
@@ -327,7 +327,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "gen_compact",
       name: `${title} Ultra-Compacto de Viaje`,
-      thumbnail: "https://sc04.alicdn.com/kf/Hddcfc4c78a0c4ebcb345efc1c98e2879Y.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1527786419736-22bf135e69bf?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' travel compact')}`,
       supplier_verified: true,
       supplier_years: 5,
@@ -347,7 +347,7 @@ export function generateAnalysis(query) {
     products.push({
       id: "gen_standard",
       name: `${title} Clásico de Lona / Acrílico`,
-      thumbnail: "https://sc04.alicdn.com/kf/HTB16VnIa5LxK1Rjy0Ffq6zYxpXaP.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=600&auto=format&fit=crop",
       alibaba_link: `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(query + ' basic acrylic classic')}`,
       supplier_verified: true,
       supplier_years: 4,

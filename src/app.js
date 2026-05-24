@@ -245,7 +245,7 @@ function renderProductCards(products) {
         <span>${p.score.toFixed(1)}</span>
       </div>
       <div class="product-img-wrapper">
-        <img src="${p.thumbnail}" alt="${p.name}" class="product-img" loading="lazy">
+        <img src="${p.thumbnail}" alt="${p.name}" class="product-img" loading="lazy" referrerpolicy="no-referrer">
         <span class="supplier-ribbon verified">✓ Verified Supplier</span>
       </div>
       <div class="product-content">
@@ -259,6 +259,10 @@ function renderProductCards(products) {
           <span class="tag-badge ${p.competition_chile.toLowerCase()}">📊 Competencia: ${p.competition_chile}</span>
           <span class="tag-badge ${p.import_difficulty.toLowerCase()}">🚚 Importación: ${p.import_difficulty}</span>
         </div>
+
+        <a href="https://listado.mercadolibre.cl/${encodeURIComponent(p.name)}" target="_blank" class="mercadolibre-link" style="color: #fbbf24; font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-top: -0.5rem; margin-bottom: 1.25rem; font-weight: 600; padding: 0.25rem 0.5rem; border-radius: 6px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); width: fit-content; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(245, 158, 11, 0.15)'; this.style.borderColor='rgba(245, 158, 11, 0.4)';" onmouseout="this.style.background='rgba(245, 158, 11, 0.08)'; this.style.borderColor='rgba(245, 158, 11, 0.2)';">
+          🔍 Ver competencia en Mercado Libre Chile ↗
+        </a>
 
         <div class="financial-grid">
           <div class="fin-item">
