@@ -155,6 +155,15 @@ function init() {
     });
   });
 
+  // Hot Sourcing Opportunities click
+  document.querySelectorAll('.hot-opp-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const query = card.getAttribute('data-query');
+      searchInput.value = query;
+      triggerAnalysis(query);
+    });
+  });
+
   // Back to Search
   backSearchBtn.addEventListener('click', () => {
     showScreen(landingScreen);
