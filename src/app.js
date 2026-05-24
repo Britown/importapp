@@ -339,11 +339,16 @@ function renderProductCards(products) {
     }
     
     card.innerHTML = `
-      <div class="score-badge" style="top: 1.25rem; right: 1.25rem;">
+      <div class="score-badge" style="top: 1.25rem; right: 1.25rem; z-index: 10;">
         <span>${starsHtml}</span>
         <span>${p.score.toFixed(1)}</span>
       </div>
-      <div class="product-content" style="padding-top: 2rem;">
+      ${p.thumbnail ? `
+      <div class="product-image-container" style="position: relative; width: 100%; height: 180px; overflow: hidden; border-radius: 12px 12px 0 0; border-bottom: 1px solid var(--glass-border);">
+        <img src="${p.thumbnail}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';" />
+      </div>
+      ` : ''}
+      <div class="product-content" style="${p.thumbnail ? 'padding: 1.25rem;' : 'padding-top: 2rem;'}">
         <h4 class="product-title" style="padding-right: 6rem;">${p.name}</h4>
         <div class="supplier-meta">
           <span>💼 Alibaba B2B</span>

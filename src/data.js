@@ -11,7 +11,7 @@ export const curatedData = {
       {
         "id": "thermal_gun",
         "name": "Pistola de Masaje Térmica (Frío/Calor Activo)",
-        "thumbnail": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&auto=format&fit=crop",
+        "thumbnail": "/images/thermal_gun.png",
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=massage+gun+hot+cold+active+peltier",
         "supplier_verified": true,
         "supplier_years": 8,
@@ -30,7 +30,7 @@ export const curatedData = {
       {
         "id": "mini_gun",
         "name": "Mini Fascia Massage Gun (Carga USB-C)",
-        "thumbnail": "https://images.unsplash.com/photo-1607962837359-5e7e89f866ad?w=600&auto=format&fit=crop",
+        "thumbnail": "/images/mini_gun.png",
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=mini+massage+gun+pocket+usb-c",
         "supplier_verified": true,
         "supplier_years": 5,
@@ -49,7 +49,7 @@ export const curatedData = {
       {
         "id": "pro_gun",
         "name": "Pistola de Masaje Profesional (Motor Brushless + Maleta EVA)",
-        "thumbnail": "https://images.unsplash.com/photo-1591343395902-1adcb454c2e4?w=600&auto=format&fit=crop",
+        "thumbnail": "/images/pro_gun.png",
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=professional+massage+gun+brushless+eva+case",
         "supplier_verified": true,
         "supplier_years": 6,
@@ -79,7 +79,7 @@ export const curatedData = {
       {
         "id": "slicker_brush",
         "name": "Cepillo Autolimpiante Slicker para Perros y Gatos",
-        "thumbnail": "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=600&auto=format&fit=crop",
+        "thumbnail": "/images/slicker_brush.png",
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=self+cleaning+slicker+brush+dogs+cats",
         "supplier_verified": true,
         "supplier_years": 6,
@@ -98,7 +98,7 @@ export const curatedData = {
       {
         "id": "led_clippers",
         "name": "Cortauñas Profesional de Mascotas con Luz LED",
-        "thumbnail": "https://images.unsplash.com/photo-1629909615184-74f495363b67?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=pet+nail+clipper+led+light",
         "supplier_verified": true,
         "supplier_years": 4,
@@ -117,7 +117,7 @@ export const curatedData = {
       {
         "id": "pet_vacuum",
         "name": "Aspiradora y Limpiador de Pelo Inalámbrico USB",
-        "thumbnail": "https://images.unsplash.com/photo-1563422156298-c778a278f9a5?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=pet+hair+vacuum+cleaner+rechargeable",
         "supplier_verified": true,
         "supplier_years": 3,
@@ -147,7 +147,7 @@ export const curatedData = {
       {
         "id": "garlic_chopper",
         "name": "Picadora de Ajo y Verduras Eléctrica USB",
-        "thumbnail": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=600&auto=format&fit=crop",
+        "thumbnail": "/images/garlic_chopper.png",
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=electric+mini+garlic+chopper+wireless+usb",
         "supplier_verified": true,
         "supplier_years": 7,
@@ -166,7 +166,7 @@ export const curatedData = {
       {
         "id": "water_dispenser",
         "name": "Dispensador Automático de Agua USB para Bidón",
-        "thumbnail": "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=automatic+water+dispenser+pump+usb+barrel",
         "supplier_verified": true,
         "supplier_years": 10,
@@ -185,7 +185,7 @@ export const curatedData = {
       {
         "id": "knife_sharpener",
         "name": "Afilador Eléctrico de Cuchillos de 3 Etapas (220V)",
-        "thumbnail": "https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=professional+electric+knife+sharpener+3+stage",
         "supplier_verified": true,
         "supplier_years": 5,
@@ -215,7 +215,7 @@ export const curatedData = {
       {
         "id": "car_compressor",
         "name": "Compresor de Aire Inteligente Portátil USB",
-        "thumbnail": "https://images.unsplash.com/photo-1617469167446-80e3a4466551?w=600&auto=format&fit=crop",
+        "thumbnail": "/images/car_compressor.png",
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=portable+smart+car+air+compressor+digital+tire+inflator",
         "supplier_verified": true,
         "supplier_years": 6,
@@ -234,7 +234,7 @@ export const curatedData = {
       {
         "id": "car_vacuum",
         "name": "Aspiradora de Auto Inalámbrica Potente USB",
-        "thumbnail": "https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=high+power+cordless+car+vacuum+cleaner+rechargeable",
         "supplier_verified": true,
         "supplier_years": 4,
@@ -253,7 +253,7 @@ export const curatedData = {
       {
         "id": "fm_transmitter",
         "name": "Transmisor Bluetooth FM para Auto QC 3.0",
-        "thumbnail": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=car+bluetooth+fm+transmitter+qc3.0",
         "supplier_verified": true,
         "supplier_years": 9,
@@ -283,7 +283,7 @@ export const curatedData = {
       {
         "id": "hexagon_panels",
         "name": "Paneles LED Hexagonales RGB Inteligentes (USB)",
-        "thumbnail": "https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=modular+hexagon+led+lights+rgb+smart+usb",
         "supplier_verified": true,
         "supplier_years": 5,
@@ -302,7 +302,7 @@ export const curatedData = {
       {
         "id": "smart_plug",
         "name": "Enchufe Inteligente Wi-Fi Smart Plug (Norma Chilena)",
-        "thumbnail": "https://images.unsplash.com/photo-1558002038-1055907df827?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=tuya+smart+wifi+plug+chile+italian+standard+220v",
         "supplier_verified": true,
         "supplier_years": 8,
@@ -321,7 +321,7 @@ export const curatedData = {
       {
         "id": "smart_camera",
         "name": "Cámara de Seguridad Robotizada Inteligente Wi-Fi",
-        "thumbnail": "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=600&auto=format&fit=crop",
+        "thumbnail": null,
         "alibaba_link": "https://www.alibaba.com/trade/search?SearchText=smart+wifi+ip+security+camera+robot+pan+tilt",
         "supplier_verified": true,
         "supplier_years": 7,
