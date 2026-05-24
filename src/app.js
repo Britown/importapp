@@ -49,8 +49,7 @@ const summarySafeDesc = document.getElementById('summary-safe-desc');
 // Active state report data
 let activeReport = null;
 
-// Initialize Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
+function init() {
   // Search Form Submit
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -105,7 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
     labelResalePrice.textContent = `$${numVal.toLocaleString('es-CL')} CLP`;
     calculateSimulation();
   });
-});
+}
+
+// Check readyState to prevent module race condition
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
 // Screen State Router
 function showScreen(screenToShow) {
