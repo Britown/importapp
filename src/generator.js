@@ -233,6 +233,39 @@ export function generateAnalysis(query) {
       difficulty = "Easy";
     }
 
+    // Determine certifications and regulatory entity
+    let certs = ["ISO 9001", "CE"];
+    if (category === "electronics") {
+      certs = ["CE", "RoHS", "ISO 9001"];
+    } else if (category === "cosmetics_health") {
+      certs = ["FDA", "ISO 22716", "COA"];
+    } else if (category === "food_contact") {
+      certs = ["FDA", "LFGB", "BPA-Free"];
+    } else if (category === "agricultural") {
+      certs = ["FSC", "Phytosanitary Cert"];
+    }
+
+    let entity = "Ninguna";
+    if (category === "electronics") {
+      if (name.includes("220V") || name.includes("Industrial")) {
+        entity = "SEC";
+      } else if (name.includes("App WiFi") || name.includes("Alexa") || name.includes("WiFi")) {
+        entity = "Subtel";
+      }
+    } else if (category === "cosmetics_health") {
+      if (!name.includes("Kit") && !name.includes("Estuche") && !name.includes("Brochas") && !name.includes("Espejo")) {
+        entity = "ISP";
+      }
+    } else if (category === "agricultural") {
+      if (name.includes("Bamboo") || name.includes("Madera") || name.includes("Yute")) {
+        entity = "SAG";
+      }
+    } else if (category === "food_contact") {
+      entity = "Seremi Salud";
+    }
+
+    const responseRate = `${88 + (idx % 12)}%`;
+
     // Recommendation logic: index 1 is usually the best opportunity
     const isRecommended = idx === 1;
     const score = isRecommended ? 4.9 : parseFloat((3.0 + (margin / 30) + (10 - idx % 8) * 0.1).toFixed(1));
@@ -246,6 +279,9 @@ export function generateAnalysis(query) {
       ml_link,
       supplier_verified: idx % 3 !== 0,
       supplier_years: 3 + (idx % 8),
+      supplier_response_rate: responseRate,
+      supplier_certifications: certs,
+      regulatory_entity: entity,
       unit_cost_usd: unitCost,
       estimated_resale_clp: resaleClp,
       estimated_margin_percent: margin,

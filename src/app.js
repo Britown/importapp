@@ -449,6 +449,26 @@ function updateFilterCounts() {
   if (btnMatch) btnMatch.textContent = `Coincidencia en ML (${matchCount})`;
 }
 
+// Helper to render Chilean custom agency regulations badge
+function getRegulatoryBadgeHtml(entity) {
+  if (!entity || entity === 'Ninguna') {
+    return `<span class="tag-badge direct-import" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">✓ Internación Directa</span>`;
+  }
+  let colorStyle = '';
+  if (entity === 'SEC') {
+    colorStyle = 'background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35); color: #f87171;';
+  } else if (entity === 'ISP') {
+    colorStyle = 'background: rgba(167, 139, 250, 0.15); border: 1px solid rgba(167, 139, 250, 0.35); color: #c084fc;';
+  } else if (entity === 'SAG') {
+    colorStyle = 'background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24;';
+  } else if (entity === 'Subtel') {
+    colorStyle = 'background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); color: #60a5fa;';
+  } else if (entity === 'Seremi Salud') {
+    colorStyle = 'background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.35); color: #22d3ee;';
+  }
+  return `<span class="tag-badge regulatory" style="${colorStyle}">⚠️ Req. ${entity}</span>`;
+}
+
 // Render the top featured star recommendation block
 function renderFeaturedRecommendation(p) {
   if (!featuredContainer) return;
@@ -462,6 +482,11 @@ function renderFeaturedRecommendation(p) {
   const landedCostClp = calculateUnitLandedCost(p);
   const marginClp = p.estimated_resale_clp - landedCostClp;
   const realMarginPercent = Math.round((marginClp / p.estimated_resale_clp) * 100);
+
+  const fitByVolume = p.volume_cbm && p.volume_cbm > 0 ? Math.floor(33 / p.volume_cbm) : 0;
+  const fitByWeight = p.weight_kg && p.weight_kg > 0 ? Math.floor(20000 / p.weight_kg) : 0;
+  const containerFitQty = (fitByVolume > 0 && fitByWeight > 0) ? Math.min(fitByVolume, fitByWeight) : 0;
+  const containerFitText = containerFitQty > 0 ? `${containerFitQty.toLocaleString('es-CL')} uds` : 'N/A';
 
   const isSold = p.photo_match && p.photo_match !== 'No vendido en Chile';
   let badgeClass = 'none';
@@ -488,15 +513,17 @@ function renderFeaturedRecommendation(p) {
         <h3 class="featured-title" style="margin-top: 0;">${p.name}</h3>
         <p class="featured-selling-angle" style="margin-top: 0; margin-bottom: 1rem;">${p.selling_angle}</p>
         
-        <div class="supplier-meta" style="margin-bottom: 1rem;">
+        <div class="supplier-meta" style="margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.75rem;">
           <span>💼 Alibaba B2B (Proveedor Verificado)</span>
           <span>📅 ${p.supplier_years} años activo</span>
+          <span style="color: #fbbf24;">⚡ Resp: ${p.supplier_response_rate || '95%'}</span>
+          <span style="color: var(--text-muted);">📜 Cert: ${p.supplier_certifications ? p.supplier_certifications.join(', ') : 'CE'}</span>
         </div>
 
         <div class="badges-row" style="margin-bottom: 1.25rem;">
           <span class="tag-badge verified" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">✓ Proveedor Validado</span>
           <span class="tag-badge ${p.competition_chile.toLowerCase()}">📊 Competencia: ${p.competition_chile}</span>
-          <span class="tag-badge ${p.import_difficulty.toLowerCase()}">🚚 Importación: ${p.import_difficulty}</span>
+          ${getRegulatoryBadgeHtml(p.regulatory_entity)}
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
@@ -512,12 +539,20 @@ function renderFeaturedRecommendation(p) {
                 <span class="fin-val" style="color: #fbbf24; font-weight: 700;">$${landedCostClp.toLocaleString('es-CL')} CLP</span>
               </div>
               <div class="fin-item">
-                <span class="fin-label">Peso Promedio</span>
-                <span class="fin-val">${p.weight_kg} kg</span>
+                <span class="fin-label">Pto. Equilibrio</span>
+                <span class="fin-val" style="color: #e0f2fe; font-weight: 600;">$${landedCostClp.toLocaleString('es-CL')} CLP</span>
               </div>
               <div class="fin-item">
                 <span class="fin-label">Margen Esperado</span>
                 <span class="fin-val highlight">${realMarginPercent}%</span>
+              </div>
+              <div class="fin-item">
+                <span class="fin-label">Peso Promedio</span>
+                <span class="fin-val">${p.weight_kg} kg</span>
+              </div>
+              <div class="fin-item">
+                <span class="fin-label">Cubicación (20ft)</span>
+                <span class="fin-val" style="font-size: 0.75rem; font-weight: 700;">${containerFitText}</span>
               </div>
             </div>
           </div>
@@ -581,6 +616,11 @@ function renderProductCards(products) {
     const marginClp = p.estimated_resale_clp - landedCostClp;
     const realMarginPercent = Math.round((marginClp / p.estimated_resale_clp) * 100);
 
+    const fitByVolume = p.volume_cbm && p.volume_cbm > 0 ? Math.floor(33 / p.volume_cbm) : 0;
+    const fitByWeight = p.weight_kg && p.weight_kg > 0 ? Math.floor(20000 / p.weight_kg) : 0;
+    const containerFitQty = (fitByVolume > 0 && fitByWeight > 0) ? Math.min(fitByVolume, fitByWeight) : 0;
+    const containerFitText = containerFitQty > 0 ? `${containerFitQty.toLocaleString('es-CL')} uds` : 'N/A';
+
     const isSold = p.photo_match && p.photo_match !== 'No vendido en Chile';
     let badgeClass = 'none';
     if (isSold) {
@@ -631,20 +671,23 @@ function renderProductCards(products) {
       ` : ''}
       <div class="product-content" style="${p.thumbnail ? 'padding: 1.25rem;' : 'padding-top: 2rem;'}">
         <h4 class="product-title" style="padding-right: 6rem; margin-top: 0; min-height: 2.8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${p.name}</h4>
-        <div class="supplier-meta" style="margin-bottom: 0.75rem;">
-          <span>💼 Alibaba B2B</span>
-          <span>📅 ${p.supplier_years} años activo</span>
+        <div class="supplier-meta" style="margin-bottom: 0.75rem; display: flex; flex-direction: column; gap: 0.15rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span>💼 Alibaba (Resp. ${p.supplier_response_rate || '95%'})</span>
+            <span>📅 ${p.supplier_years} años</span>
+          </div>
+          <span style="font-size: 0.7rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">📜 Cert: ${p.supplier_certifications ? p.supplier_certifications.join(', ') : 'CE'}</span>
         </div>
         
         <div class="badges-row" style="margin-bottom: 1rem;">
-          <span class="tag-badge verified" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">✓ Verified Supplier</span>
-          <span class="tag-badge ${p.competition_chile.toLowerCase()}">📊 Competencia: ${p.competition_chile}</span>
-          <span class="tag-badge ${p.import_difficulty.toLowerCase()}">🚚 Importación: ${p.import_difficulty}</span>
+          <span class="tag-badge verified" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">✓ Validado</span>
+          <span class="tag-badge ${p.competition_chile.toLowerCase()}">📊 Comp: ${p.competition_chile}</span>
+          ${getRegulatoryBadgeHtml(p.regulatory_entity)}
         </div>
 
         ${competitorPanelHtml}
 
-        <div class="financial-grid" style="margin-bottom: 1rem;">
+        <div class="financial-grid" style="margin-bottom: 1rem; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;">
           <div class="fin-item">
             <span class="fin-label">FOB Unitario</span>
             <span class="fin-val">$${p.unit_cost_usd.toFixed(2)} USD</span>
@@ -654,12 +697,20 @@ function renderProductCards(products) {
             <span class="fin-val" style="color: #fbbf24;">$${landedCostClp.toLocaleString('es-CL')} CLP</span>
           </div>
           <div class="fin-item">
+            <span class="fin-label">Pto. Equilibrio</span>
+            <span class="fin-val" style="color: #e0f2fe; font-weight: 600;">$${landedCostClp.toLocaleString('es-CL')} CLP</span>
+          </div>
+          <div class="fin-item">
             <span class="fin-label">Margen Real</span>
             <span class="fin-val highlight">${realMarginPercent}%</span>
           </div>
           <div class="fin-item">
             <span class="fin-label">Peso Promedio</span>
             <span class="fin-val">${p.weight_kg} kg</span>
+          </div>
+          <div class="fin-item">
+            <span class="fin-label">Cubicación (20ft)</span>
+            <span class="fin-val" style="font-size: 0.7rem; font-weight: 600;">${containerFitText}</span>
           </div>
         </div>
 
