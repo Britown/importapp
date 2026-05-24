@@ -187,14 +187,14 @@ export function generateAnalysis(query) {
     // Naming parameters
     const slug = name.lowerCaseNormalized();
     const id = `${category.substring(0, 4)}_${idx}`;
-    const alibaba_link = `https://www.alibaba.com/product-detail/${slug}_1600${123400000 + idx}.html`;
+    const alibaba_link = `https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(name)}&tab=verified`;
     
     let photo_match = "No vendido en Chile";
     let ml_link = "#";
     if (idx % 4 !== 0) {
       const matchRates = ["98% (Idéntico)", "96% (Mismo Modelo)", "92% (Similar)"];
       photo_match = matchRates[idx % 3];
-      ml_link = `https://articulo.mercadolibre.cl/MLC-${500000000 + idx}-${slug}.html`;
+      ml_link = `https://listado.mercadolibre.cl/${encodeURIComponent(name)}`;
     }
     
     // Assign weight and volume
